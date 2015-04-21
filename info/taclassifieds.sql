@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 20, 2015 at 05:48 PM
+-- Generation Time: Apr 21, 2015 at 12:02 PM
 -- Server version: 5.5.27
 -- PHP Version: 5.4.7
 
@@ -19,6 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `taclassifieds`
 --
+CREATE DATABASE `taclassifieds` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `taclassifieds`;
 
 -- --------------------------------------------------------
 
@@ -33,6 +35,14 @@ CREATE TABLE IF NOT EXISTS `taclassifiedusers` (
   `emppassword` varchar(25) NOT NULL,
   PRIMARY KEY (`empid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `taclassifiedusers`
+--
+
+INSERT INTO `taclassifiedusers` (`empid`, `empname`, `empemail`, `emppassword`) VALUES
+(1127, 'Upendra Reddy V', 'upendrav@techaspect.com', 'password'),
+(1370, 'Sreeja S', 'sreejas@techaspect.com', 'password');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
