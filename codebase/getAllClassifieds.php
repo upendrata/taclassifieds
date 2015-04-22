@@ -14,7 +14,7 @@
 			$dbConnect = new taClassifiedDBConnect();
 			if($dbConnect->authenticateDB()){
 				if($dbConnect->connectToDB()){
-					$search_query = "select * from taclassifieds where classifiedDisplay = 1 order by classifiedId DESC LIMIT 5";
+					$search_query = "select * from taclassifieds where classifiedDisplay = 1 order by classifiedId DESC";
 					$search_result = mysql_query($search_query);
 					$classifiedsData = array();  $classifiedItem = array(); $count=0;
 					while ($search_row = mysql_fetch_array($search_result)) {

@@ -1,3 +1,0 @@
-Database name: taclassifieds
-
-need to create table
