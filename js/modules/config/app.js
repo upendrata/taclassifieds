@@ -1,20 +1,43 @@
 var classifieds = classifieds || {};
+var data;
 classifieds.router = Backbone.Router.extend({
 	routes:{
 		"":"showHomePage",
 		"home":"showHomePage",
+		"logout":"showHome",
 		"login":"showLoginPage",
-		"signup":"showSignUpPage"
+		"signup":"showSignUpPage",
+		"classifieds":"showUserHomePage",
+		"userClassifieds":"showMyClassifieds",
+		"postClassified":"showClassifiedForm"
+	},
+	showHome:function(){
+		sessionStorage.removeItem('username');
+		var homePagePresenterObj = new classifieds.homePagePresenter();
+		homePagePresenterObj.showHomePage();
 	},
 	showHomePage:function(){
-		var headerObj = new classified.headerView({el:".headerContainer",template:'#ta-classified-header-tpl'});
-		var footerObj = new classified.footerView({el:".footerContainer",template:"#ta-classified-footer-tpl"});
-		var homePageObj = new classified.homePageView({el:'#pageContainer',template:"#ta-classified-homepage-tpl"});
+		var homePagePresenterObj = new classifieds.homePagePresenter();
+		homePagePresenterObj.showHomePage();
 	},
 	showLoginPage:function(){
-		var loginPageObj = new classified.loginPageView({el:"#pageContainer",template:"#ta-classified-login-tpl"});
+		var loginPagePresenterObj = new classifieds.loginPagePresenter();
+		loginPagePresenterObj.showLoginPage();
 	},
 	showSignUpPage:function(){
-		var signUpPageObj = new classified.signUpPageView({el:"#pageContainer",template:"#ta-classified-signup-tpl"});
+		var signUpPagePresenterObj = new classifieds.signUpPagePresenter();
+		signUpPagePresenterObj.showSignUpPage();
+	},
+	showUserHomePage:function(){
+		var userHomePagePresenterObj = new classifieds.userHomePagePresenter();
+		userHomePagePresenterObj.showUserHomePage(); 
+	},
+	showMyClassifieds:function(){
+		var userHomePagePresenterObj = new classifieds.userHomePagePresenter();
+		userHomePagePresenterObj.showMyClassifieds(); 
+	},
+	showClassifiedForm:function(){
+		var userHomePagePresenterObj = new classifieds.userHomePagePresenter();
+		userHomePagePresenterObj.showClassifiedForm(); 
 	}
 });

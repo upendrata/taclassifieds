@@ -7,62 +7,106 @@
 	font-family:arial;
 }
 /*Header styles*/
-.headerContainer {
+.header-container {
 	background: none repeat scroll 0 0 #002d40;
     padding: 8px 9px 10px;
 	img {
-	    width: 100%;
+	    width: 20%;
+	    cursor:pointer;
 	}
 	h1 {
+	    color: #fff;
 	    display: inline-block;
 	    font-size: 25px;
 	    margin-top: 28px;
 	    text-align: center;
 	    vertical-align: top;
-	    width: 58%;
-	    color:#fff;
+	    width: 64%;
 	}	
 	a {
+	    color: #fff;
 	    display: inline-block;
+	    font-size: 13px;
+	    font-weight: bold;
+	    margin-left: 0;
 	    margin-top: 36px;
+	    text-align: right;
 	    text-decoration: none;
 	    vertical-align: top;
-	    width: 10%;
-	    font-size: 15px;
-	    color:#fff;
-	    font-weight:bold;
+	    width: 7%;
+	}
+	.signin-links {
+		display:inline;
+	}
+	.logout-links {
+		display:none;
+	}
+	.show {
+		display:inline;
+	}
+	.hide {
+		display:none;
 	}
 }
 #home {
     margin-top: 0;
     width: 20%;
 }
-#pageContainer {
+#page-container {
     border: 1px solid #dddddd;
 }
 /*Home page styles*/
 .home-page {
-	padding: 20px 20px 50px;
-	p {
+	padding: 60px 20px 80px;
+	.about-us {
 		display: inline-block;
-	    font-size: 17px;
-	    line-height: 1.5;
-	    padding: 5px 10px;
-	    width: 58%;
+	    margin: 0 2%;
+	    width: 45%;
+		h2 {
+		    font-size: 22px;
+		    margin-bottom: 10px;
+		}
+		p {
+		    font-size: 15px;
+		    line-height: 1.6;
+		    overflow: hidden;
+		    text-align: justify;
+		    text-indent: 65px;
+		}
 	}
 	ol {
 		display: inline-block;
-	    font-size: 18px;
+	    font-size: 17px;
 	    line-height: 1.7;
-	    list-style: outside none num;
-	    text-align: center;
-	    width: 39%;
+	    list-style: inside none num;
+	    margin-left: 5%;
+	    vertical-align: top;
+	    width: 45%;
+	    li{
+	    	padding: 5px 0;
+	    	.classified-category {
+			    font-weight: bold;
+			}
+	    	.classified-heading,
+	    	.emp-email {
+	    		font-weight:normal;
+	    	}
+	    	.classified-heading {
+	    		font-size:14px;
+	    	}
+	    	.emp-email {
+			    color: #93979E;
+			    font-size: 12px;
+			    margin-left: 7px;
+			}
+	    }
 	}
 }
 /*Login page styles*/
 .login-page,
-.sign-up {
-	margin: 0 auto;
+.sign-up,
+.post-a-classified {
+	margin: 10px auto;
     overflow: hidden;
     width: 357px;
 	label {
@@ -88,6 +132,15 @@
 	    padding: 8px 25px;
 	}
 }
+.error-msg {
+    color: #f90723;
+    font-size: 17px;
+    margin-bottom: 50px;
+    text-align: center;
+}
+.login-page {
+    margin: 60px auto 20px;
+}
 .sign-up {
 	span {
 		display: block;
@@ -98,12 +151,99 @@
 	    width: 350px;
 	}
 }
+/*Classifieds Page */
+.user-home-page {
+	.options {
+		/*font-size: 0;
+    	text-align: right;*/
+    	border:1px solid #ddd;
+		a {
+		    /*background: none repeat scroll 0 0 #ddd;
+		    border-left: 1px solid #ccc;
+		    border-radius: 0 0 15px 15px;
+		    color: #fff;
+		    display: inline-block;
+		    font-size: 17px;
+		    padding: 10px 25px;
+		    text-align: center;
+		    text-decoration: none;*/
+		    width:33%;
+		    color:#000;
+		    display:inline-block;
+		    padding:10px 0;
+		    text-align:center;
+		    text-decoration:none;
+		    border-left: 1px solid #ccc;
+		}
+	}
+	.all-classifieds-list {
+		padding:0;
+	}
+	ul {
+		display:block;
+	    font-size: 17px;
+	    line-height: 1.7;
+	    list-style: inside none num;
+	    vertical-align: top;
+	    li{
+	    	border:1px solid #ddd;
+	    	padding: 5px 0;
+	    	.classified-category {
+			    display: inline-block;
+			    font-weight: bold;
+			    width: 15%;
+			}
+	    	.classified-heading,
+	    	.emp-email {
+	    		font-weight:normal;
+	    	}
+	    	.classified-heading {
+	    		font-size:14px;
+	    	}
+	    	.emp-email {
+			    color: #93979E;
+			    font-size: 12px;
+			    margin-left: 7px;
+			}
+	    }
+	    li.odd{
+	    	background:#ddd;
+	    }
+	}
+}
+.post-a-classified {
+	margin:35px auto;
+	textarea {
+		width:200px;
+	}
+}
 /*footer styles*/
-.footerContainer {
+.footer-container {
 	background:#002D40;
 	text-align:center;
 	padding:7px 0;
 	span{
 		color:#fff;
 	}
+}
+#loader-img {
+	background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    left: 50%;
+    opacity: 1;
+    padding: 15px;
+    position: absolute;
+    top: 50%;
+    display:none;
+}
+.loader-mask{
+	position:absolute;
+	top:0;
+	bottom:0;
+	background-color:#fff;
+	opacity:0.6;
+	width:100%;
+	height:100%;
+	display:none;
 }
