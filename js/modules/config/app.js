@@ -8,11 +8,12 @@ classifieds.router = Backbone.Router.extend({
 		"login":"showLoginPage",
 		"signup":"showSignUpPage",
 		"classifieds":"showUserHomePage",
-		"userClassifieds":"showMyClassifieds",
+		"myclassifieds":"showMyClassifieds",
 		"postClassified":"showClassifiedForm"
 	},
 	showHome:function(){
-		sessionStorage.removeItem('username');
+		sessionStorage.clear();
+		classifieds.homePageObj = null;
 		var homePagePresenterObj = new classifieds.homePagePresenter();
 		homePagePresenterObj.showHomePage();
 	},

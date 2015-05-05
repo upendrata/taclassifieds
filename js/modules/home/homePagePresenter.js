@@ -11,8 +11,11 @@ classifieds.homePagePresenter = function(){
 					classifieds.Loader.show();
 				},
 				success:function(resp){
+					if(sessionStorage.getItem("username")!=null){
+						classifieds.menuObj = new classified.menuView({el:"#page-container",template:"#ta-classified-menu-tpl"});
+					}
 					var classifiedObj = new classifiedCollection(resp);
-					var homePageObj = new classified.homePageView({el:'#page-container',template:"#ta-classified-homepage-tpl",model:classifiedObj});
+					var homePage = new classified.homePageView({el:'#page-container',template:"#ta-classified-homepage-tpl",model:classifiedObj});
 				},
 				error:function(resp){
 					alert("error");
