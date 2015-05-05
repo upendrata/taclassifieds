@@ -1,60 +1,93 @@
 var classifieds = classifieds || {};
 classifieds.userHomePagePresenter = function(){
+	function allClassifieds(resp){
+		var modelRef = new classifieds.allClasifiedsPageModel();
+		modelRef.set(modelRef.parse(resp));
+		bindViews();
+		classifieds.listObj = new classified.listView({el:"#classifieds-container",template:"#ta-classified-list-base-tpl",model:modelRef});
+		sessionStorage.setItem("allClassifieds",JSON.stringify(modelRef));
+	}
+	function myClassifieds(resp){
+		var modelRefObj = new classifieds.myClasifiedsPageModel();
+		modelRefObj.set(modelRefObj.parse(resp));
+		bindViews();
+		classifieds.listObj = new classified.myListView({el:"#classifieds-container",template:"#ta-classified-list-base-tpl",model:modelRefObj});
+		sessionStorage.setItem("allMyClassifieds",JSON.stringify(modelRefObj));
+	}
+	function bindViews(){
+		if(classifieds.homePageObj==null){
+			classifieds.homePageObj = new classified.userHomePageView({el:"#page-container",template:"#ta-classified-user-base-tpl"});
+			classifieds.menuObj = new classified.menuView({el:"#menu",template:"#ta-classified-menu-tpl"});
+		}	
+		selectedListItem();
+	}
+	function selectedListItem(){
+		$('.options a.highlight').removeClass();
+		var index = sessionStorage.getItem("index");
+		if(index==null){
+			$('.options a').eq(0).addClass("highlight");
+		} else {
+			$('.options a').eq(index).addClass("highlight");
+		}
+	}
 	return{
 		showUserHomePage: function(){
-			if(sessionStorage.getItem("allClassifieds")==null){
-				var homePageModelObj = new classifiedModel();
-				homePageModelObj.fetch({
+			var allClassifiedsData = sessionStorage.getItem("allClassifieds");
+			if(allClassifiedsData==null){
+				$.ajax({
 					type:"GET",
 					url:"codebase/getAllClassifieds.php",
 					dataType:"JSON",
+					beforeSend:function(){
+						classifieds.Loader.show();
+					},
 					success:function(resp){
-						console.log(resp);
-						sessionStorage.setItem("allClassifieds",JSON.stringify(resp));
-						var allClassifiedsObj = new allClassifiedCollection(JSON.parse(sessionStorage.getItem("allClassifieds")));
-						var userHomePageObj = new classified.userHomePageView({el:"#page-container",template:"#ta-classified-user-home-tpl",model:allClassifiedsObj});
-						var allClassifieds = new classified.allClassifiedsView({el:".all-classifieds-list",template:"#ta-classified-all-classifieds-tpl",model:allClassifiedsObj});
+						allClassifieds(resp);
 					},
 					error:function(resp){
-						alert("error");
+						console.log(resp);
+					},
+					complete:function(){
+						classifieds.Loader.hide();
 					}
 				});
 			} else {
-				var allClassifiedsObj = new allClassifiedCollection(JSON.parse(sessionStorage.getItem("allClassifieds")));
-				var userHomePageObj = new classified.userHomePageView({el:"#page-container",template:"#ta-classified-user-home-tpl",model:allClassifiedsObj});
-				var allClassifieds = new classified.allClassifiedsView({el:".all-classifieds-list",template:"#ta-classified-all-classifieds-tpl",model:allClassifiedsObj});
+				allClassifieds(JSON.parse(allClassifiedsData));
 			}
 		},
 		showMyClassifieds:function(){
-			if(sessionStorage.getItem("myClassifieds")==null){
-				var myClassifiedObj = new myClassifiedsModel();
-				myClassifiedObj.fetch({
+			var allMyClassifiedsData = sessionStorage.getItem("allMyClassifieds");
+			var data ={
+				empemail:sessionStorage.getItem("username")
+			}
+			if(allMyClassifiedsData==null){
+				$.ajax({
 					type:"POST",
 					url:"codebase/getAllMyClassifieds.php",
 					dataType:"JSON",
 					data :{
-							empemail:sessionStorage.getItem("username")
-						},
+						empemail:sessionStorage.getItem("username")
+					},
+					beforeSend:function(){
+						classifieds.Loader.show();
+					},
 					success:function(resp){
-						console.log(resp);
-						sessionStorage.setItem("myClassifieds",JSON.stringify(resp));
-						var myClassifiedsObj = new myClassifiedCollection(JSON.parse(sessionStorage.getItem("myClassifieds")));
-						var userHomePageObj = new classified.userHomePageView({el:"#page-container",template:"#ta-classified-user-home-tpl",model:myClassifiedsObj});
-						var allClassifieds = new classified.allClassifiedsView({el:".all-classifieds-list",template:"#ta-classified-my-classifieds-tpl",model:myClassifiedsObj});
+						myClassifieds(resp);
 					},
 					error:function(resp){
 						alert("error");
+					},
+					complete:function(){
+						classifieds.Loader.hide();
 					}
 				});
 			} else {
-				var myClassifiedsObj = new myClassifiedCollection(JSON.parse(sessionStorage.getItem("myClassifieds")));
-				var userHomePageObj = new classified.userHomePageView({el:"#page-container",template:"#ta-classified-user-home-tpl",model:myClassifiedsObj});
-				var allClassifieds = new classified.allClassifiedsView({el:".all-classifieds-list",template:"#ta-classified-my-classifieds-tpl",model:myClassifiedsObj});
+				myClassifieds(JSON.parse(allMyClassifiedsData));
 			}
 		},
 		showClassifiedForm:function(){
-			var userHomePageObj = new classified.userHomePageView({el:"#page-container",template:"#ta-classified-user-home-tpl"});
-			var postClassifiedObj = new classified.postClassifiedView({el:".user-home-page",template:"#ta-classified-post-classified-tpl"});		
+			bindViews();
+			var postClassifiedObj = new classified.postClassifiedView({el:"#classifieds-container",template:"#ta-classified-post-classified-tpl"});		
 		}
 	}
 }

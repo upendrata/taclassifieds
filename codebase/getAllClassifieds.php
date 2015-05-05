@@ -34,8 +34,11 @@
 				 // Set HTTP Response
 				$response['status'] = 200;
 				header('HTTP/1.1 '.$response['status'].' '.$http_response_code[ $response['status'] ]);
+				$obj = (object)[
+					"allClassifieds"=>$classifiedsData
+				];
 				
-				echo json_encode($classifiedsData);
+				echo json_encode($obj);
 			}else{
 				 // Set HTTP Response
 				$response['status'] = 404;

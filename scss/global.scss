@@ -211,6 +211,56 @@
 	    }
 	}
 }
+
+.options {
+	font-size: 0;
+	text-align: right;
+	a {
+		/*background: none repeat scroll 0 0 #f2f2ea;*/
+	    border: 1px solid #ddd;
+	    color: #000;
+	    display: inline-block;
+	    font-size: 15px;
+	    padding: 10px 12px;
+	    text-decoration: none;
+	}
+}
+.display-all-link {
+    display: block;
+    padding: 10px 20px;
+    text-align: right;
+}
+#classifieds-container {
+	margin-top: 10px;
+    text-align: right;
+	ul {
+		border: 1px solid #dddddd;
+	    list-style: inside none num;
+	    margin: 0;
+	    text-align: left;
+    	li {
+    		padding: 15px 20px;
+    	}
+    	li:nth-child(even) {
+    		background:#ddd;
+    	}
+    	li:nth-child(odd) {
+    		bacjground:#fff;
+    	}
+	}
+	.page-navigation-menu {
+    	margin: 5px 8px;
+		.previous, 
+		.next {
+		    border: medium none;
+		    display: inline-block;
+		    font-size: 17px;
+		    padding: 5px 10px;
+		    text-align: center;
+		    width: 34px;
+		}
+	}
+}
 .post-a-classified {
 	margin:35px auto;
 	textarea {
@@ -246,4 +296,7 @@
 	width:100%;
 	height:100%;
 	display:none;
+}
+.highlight {
+	background:#ccc;
 }

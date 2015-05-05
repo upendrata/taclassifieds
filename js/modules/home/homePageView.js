@@ -1,3 +1,4 @@
+var classified =classified  || {};
 classified.homePageView = Backbone.View.extend({
 	initialize:function(options){
 		this.options = options || {};
@@ -5,7 +6,11 @@ classified.homePageView = Backbone.View.extend({
 		this.render();
 	},
 	render:function(){
-		this.$el.html(_.template($(this.template).html()));
+		if(sessionStorage.getItem("username")!=null){
+			this.$el.append(_.template($(this.template).html()));
+		} else {
+			this.$el.html(_.template($(this.template).html()));
+		}
 		this.renderClassifiedsList();
 	},
 	renderClassifiedsList:function(){

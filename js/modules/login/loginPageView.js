@@ -1,3 +1,4 @@
+var classified = classified || {};
 classified.loginPageView = Backbone.View.extend({
 	initialize:function(options){
 		this.options = options  || {};
@@ -20,9 +21,9 @@ classified.loginPageView = Backbone.View.extend({
 			url:"codebase/validateUser.php",
 			dataType:"JSON",
 			data : data,
-			/*beforeSend:function(){
+			beforeSend:function(){
 				classifieds.Loader.show();
-			},*/
+			},
 			success:function(resp){
 				sessionStorage.setItem("username", $(".username").val());
 				$('.signin-links').addClass("hide");
@@ -32,10 +33,7 @@ classified.loginPageView = Backbone.View.extend({
 			},
 			error:function(e){
 				$('.error-msg').html(e.responseJSON.responseText);
-			}/*,
-			complete:function(){
-				classifieds.Loader.hide();
-			}*/
+			}
 		});
 	}
 });

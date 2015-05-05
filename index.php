@@ -17,8 +17,19 @@
 		<script type="text/javascript" src="js/lib/jquery-1.11.2.min.js"></script>
 		<script type="text/javascript" src="js/lib/underscore-min.js"></script>
 		<script type="text/javascript" src="js/lib/backbone-min.js"></script>
+		
 		<script type="text/javascript">
 			$(function(){
+				var headerObj = new classified.headerView({el:".header-container",template:'#ta-classified-header-tpl'});
+				var footerObj = new classified.footerView({el:".footer-container",template:"#ta-classified-footer-tpl"});
+				if(sessionStorage.getItem('username')==null){
+					$('.signin-links').removeClass("hide");
+					$('.logout-links').removeClass('show');
+				} else {
+					$('.signin-links').addClass("hide");
+					$('.logout-links').addClass('show');
+				}
+
 				var routerObj = new classifieds.router();
 				Backbone.history.start();
 			});
@@ -37,19 +48,7 @@
 		<script type="text/javascript" src="js/modules/config/model.js"></script>
 		<script type="text/javascript" src="js/modules/config/app.js"></script>
 		<script type="text/javascript" src="js/modules/config/loader.js"></script>
-		<script type="text/javascript">
-			$(function(){
-				var headerObj = new classified.headerView({el:".header-container",template:'#ta-classified-header-tpl'});
-				var footerObj = new classified.footerView({el:".footer-container",template:"#ta-classified-footer-tpl"});
-				if(sessionStorage.getItem('username')==null){
-					$('.signin-links').removeClass("hide");
-					$('.logout-links').removeClass('show');
-				} else {
-					$('.signin-links').addClass("hide");
-					$('.logout-links').addClass('show');
-				}
-			});
-		</script>
+
 		<script type="text/template" id="ta-classified-header-tpl">
 			<img class="logo" src="images/logo.png" alt="logo-img">
 			<h1>TechAspect Classifieds</h1>
@@ -59,7 +58,7 @@
 			</div>
 			<div class="logout-links">
 				<a href="#profile">My Profile</a>
-				<a href="#logout">LOGOUT</a>
+				<a class="logout-link" href="#logout">LOGOUT</a>
 			</div>
 		</script>
 
@@ -88,24 +87,33 @@
 			<div class="error-msg"></div>
 		</script>
 
-		<script type="text/template" id="ta-classified-user-home-tpl">
-			<div class="user-home-page">
-				<div class="options">
-					<a class="all-classifieds" href="#classifieds">All Classifieds</a>
-					<a class="my-classifieds" href="#userClassifieds">My Classifieds</a>
-					<a class="post-classified" href="#postClassified">Post A Classified</a>
-				</div>
-				<ul class="all-classifieds-list">
-				</ul>
+		<script type="text/template" id="ta-classified-user-base-tpl">
+			<div id="menu"></div>
+			<div id="classifieds-container"></div>
+		</script>
+
+		<script type="text/template" id="ta-classified-menu-tpl">
+			<div class="options">
+				<a class="all-classifieds highlight" href="#classifieds">All Classifieds</a>
+				<a class="my-classifieds" href="#myclassifieds">My Classifieds</a>
+				<a class="post-classified" href="#postClassified">Post A Classified</a>
+			</div>
+		</script>
+
+		<script type="text/template" id="ta-classified-list-base-tpl">
+			<ul class="all-classifieds-list"></ul>
+			<div class="page-navigation-menu">
+				<button class="previous"><</button>
+				<button class="next">></button>
 			</div>
 		</script>
 
 		<script type="text/template" id="ta-classified-all-classifieds-tpl">
-			<li><span class="classified-category"><%=classifieds.classifiedCategory%></span> - <span class="classified-heading"><%=classifieds.classifiedHeading%></span><span class="emp-email"> by <%=classifieds.empemail%></span></li>
+			<li><span class="classified-category"><%=classifieds.get('classifiedCategory')%></span> - <span class="classified-heading"><%=classifieds.get('classifiedHeading')%></span><span class="emp-email"> by <%=classifieds.get('empemail')%></span></li>
 		</script>
 
 		<script type="text/template" id="ta-classified-my-classifieds-tpl">
-			<li><span class="classified-category"><%=classifieds.classifiedCategory%></span> - <span class="classified-heading"><%=classifieds.classifiedHeading%></span></li> 
+			<li><span class="classified-category"><%=classifieds.get('classifiedCategory')%></span> - <span class="classified-heading"><%=classifieds.get('classifiedHeading')%></span></li> 
 		</script>
 
 		<script type="text/template" id="ta-classified-post-classified-tpl">
@@ -116,7 +124,7 @@
 				<input type="text" name="heading" class="heading" placeholder="Heading" required>
 				<label for="description">Description</label>
 				<textarea name="description" class="description"></textarea>
-				<button class="submit-classified" type="submit">Submit</button>
+				<button class="submit-classified" type="button">Submit</button>
 			</form>
 		</script>
 
