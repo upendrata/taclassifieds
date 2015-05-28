@@ -9,6 +9,7 @@
 	$type = $_POST['queryStr'];
 	if($type === "forgotPassword"){
 		$uname = $_POST['empemail'];
+		$sque = $_POST['empquestion'];
 		$squeans = $_POST['empqans'];
 		return $obj->forgotPassword($http_response_code, $uname, $sque, $squeans);
 	}else if($type === "updatePassword"){
@@ -16,9 +17,11 @@
 		$newpass = $_POST['emppassword'];
 		return $obj->updatePassword($http_response_code, $uname, $newpass);
 	}else if($type === "delClassified"){
-		$uname = $_POST['empemail'];
-		$newpass = $_POST['emppassword'];
-		return $obj->deleteClassified($http_response_code, $uname, $newpass);
+		$classifiedId= $_POST['classifiedId'];
+		return $obj->deleteClassified($http_response_code, $classifiedId);
+	}else if($type === "updateClassified"){
+		$classifiedId= $_POST['classifiedId'];
+		return $obj->updateClassified($http_response_code, $classifiedId);
 	}else{
 		 // Set HTTP Response
 		$response['status'] = 405;
@@ -41,11 +44,7 @@
 					if($sque === $search_row['empquestion'] && $search_row['empqans'] === $squeans){
 						$flag = true;
 					}
-				}else{
-					return "false";
 				}
-			}else{
-				return false;
 			}
 			if($flag){
 				 // Set HTTP Response
@@ -72,7 +71,6 @@
 					if(mysql_query($search_query)){
 						$flag = true;
 					}
-					
 				}
 			}
 			if($flag){
@@ -90,7 +88,63 @@
 				echo $res;
 			}
 		}
-		public function deleteClassified($http_response_code, $uname, $newpass){
+		//Delete Classified
+		public function deleteClassified($http_response_code, $classifiedId){
+			$flag = false;
+			$dbConnect = new taClassifiedDBConnect();
+			if($dbConnect->authenticateDB()){
+				if($dbConnect->connectToDB()){
+					$search_query = "DELETE FROM taclassifieds WHERE classifiedId = '$classifiedId'";
+					if(mysql_query($search_query)){
+						$flag = true;
+					}
+				}
+			}
+			if($flag){
+				// Set HTTP Response
+				$response['status'] = 200;
+				header('HTTP/1.1 '.$response['status'].' '.$http_response_code[ $response['status'] ]);
+				$res = '{"status": "Success", "responseText": "Successfully deleted the Classified"}';
+				echo $res;
+			}else{
+				// Set HTTP Response
+				$response['status'] = 404;
+				header('HTTP/1.1 '.$response['status'].' '.$http_response_code[ $response['status'] ]);
+				
+				$res = '{"status": false, "responseText": "Something went wrong not able to delete classified now please try after some time!..."}';
+				echo $res;
+			}
+		}
+		
+		//Update Classified
+		public function updateClassified($http_response_code, $classifiedId){
+			$flag = false;
+			$dbConnect = new taClassifiedDBConnect();
+			if($dbConnect->authenticateDB()){
+				if($dbConnect->connectToDB()){
+					$classifiedCategory = mysql_real_escape_string($_POST['classifiedCategory']); 
+					$classifiedHeading = mysql_real_escape_string($_POST['classifiedHeading']);
+					$classifiedDesc = mysql_real_escape_string($_POST['classifiedDesc']); 
+					$search_query = "UPDATE taclassifieds SET classifiedHeading = '$classifiedHeading', classifiedCategory = '$classifiedCategory', classifiedDesc = '$classifiedDesc'  WHERE classifiedId = '$classifiedId'";
+					if(mysql_query($search_query)){
+						$flag = true;
+					}
+				}
+			}
+			if($flag){
+				// Set HTTP Response
+				$response['status'] = 200;
+				header('HTTP/1.1 '.$response['status'].' '.$http_response_code[ $response['status'] ]);
+				$res = '{"status": "Success", "responseText": "Successfully updated the Classified"}';
+				echo $res;
+			}else{
+				// Set HTTP Response
+				$response['status'] = 404;
+				header('HTTP/1.1 '.$response['status'].' '.$http_response_code[ $response['status'] ]);
+				
+				$res = '{"status": false, "responseText": "Something went wrong not able to update your classified now please try after some time!..."}';
+				echo $res;
+			}
 		}
 	}
 ?>
