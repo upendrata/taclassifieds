@@ -18,15 +18,13 @@
 					$empemail = mysql_real_escape_string($_POST['empemail']); $classifiedCategory = mysql_real_escape_string($_POST['classifiedCategory']);
 					$classifiedHeading = mysql_real_escape_string($_POST['classifiedHeading']); $classifiedDesc = mysql_real_escape_string($_POST['classifiedDesc']); 
 					
-					$noOfClassifieds = "select * from taclassifieds";
-					$data = mysql_query($noOfClassifieds);
-					$classifiedId = 1;
-					while($row = mysql_fetch_array($data)){
-						$classifiedId++;
-					}
+					$mydate=getdate(date("U"));
+					$classifiedId = $mydate['mday'].$mydate['mon'].$mydate['year'].$mydate['hours'].$mydate['minutes'].$mydate['seconds'];
 					
 					$postAdQuery = "INSERT INTO taclassifieds(empemail, classifiedId, classifiedCategory, classifiedHeading, classifiedDesc, classifiedDisplay) VALUES ('$empemail', '$classifiedId', '$classifiedCategory', '$classifiedHeading', '$classifiedDesc', 1)";
-					$flag = mysql_query($postAdQuery);
+					if(mysql_query($postAdQuery)){
+						$flag = true;
+					}
 				}else{
 					echo "Not able to connect to Table";
 				}
