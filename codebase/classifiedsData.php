@@ -12,6 +12,9 @@
 		$sque = $_POST['empquestion'];
 		$squeans = $_POST['empqans'];
 		return $obj->forgotPassword($http_response_code, $uname, $sque, $squeans);
+	}else if($type === "validateUsername"){
+		$uname = $_POST['empemail'];
+		return $obj->validateUsername($http_response_code, $uname);
 	}else if($type === "updatePassword"){
 		$uname = $_POST['empemail'];
 		$newpass = $_POST['emppassword'];
@@ -58,6 +61,35 @@
 				header('HTTP/1.1 '.$response['status'].' '.$http_response_code[ $response['status'] ]);
 				
 				$res = '{"status": false, "responseText": "Security Question and Answer are wrong!..."}';
+				echo $res;
+			}
+		}
+		
+		public function validateUsername($http_response_code, $uname){
+			$flag = false;
+			$dbConnect = new taClassifiedDBConnect();
+			if($dbConnect->authenticateDB()){
+				if($dbConnect->connectToDB()){
+					$search_query = "select * from taclassifiedusers where empemail = '$uname'";
+					$search_result = mysql_query($search_query);
+					$search_row = mysql_fetch_array($search_result);
+					if($search_row){
+						$flag = true;
+					}
+				}
+			}
+			if($flag){
+				 // Set HTTP Response
+				$response['status'] = 200;
+				header('HTTP/1.1 '.$response['status'].' '.$http_response_code[ $response['status'] ]);
+				$res = '{"status": "Success", "showSecurityQuestions": true}';
+				echo $res;
+			}else{
+				 // Set HTTP Response
+				$response['status'] = 404;
+				header('HTTP/1.1 '.$response['status'].' '.$http_response_code[ $response['status'] ]);
+				
+				$res = '{"status": false, "responseText": "The given user name is not available with us please re-check it once!..."}';
 				echo $res;
 			}
 		}
