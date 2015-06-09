@@ -2,8 +2,7 @@ var classifieds = classifieds || {};
 classifieds.homePagePresenter = function(){
 	return{
 		showHomePage: function(){
-			var pageModelObj = new pageModel();
-			pageModelObj.fetch({
+			$.ajax({
 				type:"GET",
 				url:"codebase/getClassifiedsForHomePage.php",
 				dataType:"JSON",
@@ -11,24 +10,23 @@ classifieds.homePagePresenter = function(){
 					classifieds.Loader.show();
 				},
 				success:function(resp){
-					if(sessionStorage.getItem("username")!=null){
-						classifieds.menuObj = new classified.menuView({el:"#page-container",template:"#ta-classified-menu-tpl"});
-					}
 					var classifiedObj = new classifiedCollection(resp);
-					var homePage = new classified.homePageView({el:'#page-container',template:"#ta-classified-homepage-tpl",model:classifiedObj});
+					var homePage = new classifieds.homePageView({el:'#page-container',template:"#ta-classified-homepage-tpl",model:classifiedObj});
 				},
 				error:function(resp){
-					alert("error");
+					classifieds.Loader.hide();
+					var classifiedObj = new classifiedCollection(resp);
+					var homePage = new classifieds.homeView({el:'#page-container',template:"#ta-classified-homepage-tpl"});
+					$('.classifieds-list').html(resp.responseJSON.responseText);
 				},
 				complete:function(){
+					if(sessionStorage.getItem("username")!=null){
+						var homeMenuObj = new classifieds.menuView({el:"#menu",template:"#ta-classified-menu-tpl"});
+						classifieds.homePageObj=null;
+					}
 					classifieds.Loader.hide();
 				}
 			});
-			if(sessionStorage.getItem('username')==null){
-				$('.signin-links').removeClass("hide");
-				$('.logout-links').removeClass('show');
-			}
 		}
-
 	}
 }
