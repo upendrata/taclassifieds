@@ -19,6 +19,7 @@
 					$classifiedsData = array();  $classifiedItem = array(); $count=0;
 					while ($search_row = mysql_fetch_array($search_result)) {
 						$flag = true;
+						$classifiedItem['classifiedId'] = $search_row['classifiedId'];
 						$classifiedItem['empemail'] = $search_row['empemail'];
 						$classifiedItem['classifiedHeading'] = $search_row['classifiedHeading'];
 						$classifiedItem['classifiedCategory'] = $search_row['classifiedCategory'];
@@ -44,7 +45,7 @@
 				$response['status'] = 404;
 				header('HTTP/1.1 '.$response['status'].' '.$http_response_code[ $response['status'] ]);
 				
-				$res = '{"status": false, "responseText": "Something went wrong not able to fetch Data!..."}';
+				$res = '{"status": false, "responseText": "No Classifieds posted...:) Post one by click on Post a Classified Link from the menu!"}';
 				echo $res;
 			}
 		}

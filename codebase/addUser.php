@@ -38,7 +38,7 @@
 				$response['status'] = 404;
 				header('HTTP/1.1 '.$response['status'].' '.$http_response_code[ $response['status'] ]);
 				
-				$res = '{"status":false, "responseText": "Not able to Save data in DB!..."}';
+				$res = '{"status":false, "responseText": "Fields cannot be empty..!! Not able to Save data in DB..!!"}';
 			}
 			echo $res;
 		}

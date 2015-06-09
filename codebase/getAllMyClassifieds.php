@@ -46,7 +46,7 @@
 				$response['status'] = 404;
 				header('HTTP/1.1 '.$response['status'].' '.$http_response_code[ $response['status'] ]);
 				
-				$res = '{"status": false, "responseText": "There are no Classifieds posted by you!...:) Post one by click on Post a Classified Link from the menu!..."}';
+				$res = '{"status": false, "responseText": "No Classifieds posted by you!...:) Post one by click on Post a Classified Link from the menu!..."}';
 				echo $res;
 			}
 		}
