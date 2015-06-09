@@ -23,6 +23,13 @@
 						$classifiedItem['classifiedHeading'] = $search_row['classifiedHeading'];
 						$classifiedItem['classifiedCategory'] = $search_row['classifiedCategory'];
 						$classifiedItem['classifiedDesc'] = $search_row['classifiedDesc'];
+						$classifiedItem['classifiedNegotiable'] = $search_row['classifiedNegotiable'];
+						$classifiedItem['classifiedPrice'] = $search_row['classifiedPrice'];
+						$classifiedItem['classifiedImg1'] = $search_row['classifiedImg1'];
+						$classifiedItem['classifiedImg2'] = $search_row['classifiedImg2'];
+						$classifiedItem['classifiedImg3'] = $search_row['classifiedImg3'];
+						$classifiedItem['classifiedImg4'] = $search_row['classifiedImg4'];
+						$classifiedItem['classifiedImg5'] = $search_row['classifiedImg5'];
 						$classifiedsData[$count++] = $classifiedItem;
 					}
 				}else{
