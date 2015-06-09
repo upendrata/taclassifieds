@@ -22,6 +22,8 @@
 						$classifiedItem['empemail'] = $search_row['empemail'];
 						$classifiedItem['classifiedHeading'] = $search_row['classifiedHeading'];
 						$classifiedItem['classifiedCategory'] = $search_row['classifiedCategory'];
+						$classifiedItem['classifiedNegotiable'] = $search_row['classifiedNegotiable'];
+						$classifiedItem['classifiedPrice'] = $search_row['classifiedPrice'];
 						$classifiedsData[$count++] = $classifiedItem;
 					}
 				}else{
