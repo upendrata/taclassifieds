@@ -1,13 +1,19 @@
-securityQuestionsModel= Backbone.Model.extend({
-	initialize:function(){
-		
-	}
-});
-var securityQuestionsListCollection = Backbone.Collection.extend({model:securityQuestionsModel});
-
-var signUpModel = Backbone.Model.extend({
+var classifieds = classifieds || {};
+classifieds.signUpModel = Backbone.Model.extend({
 	initialize:function(){
 
 	}
 });
-var signUpPageRef = new signUpModel(data.signup);
+classifieds.signUpFormModel = Backbone.Model.extend({
+	defaults:{
+		'empname' : null,
+		'empid' : null,
+		'empemail' : null,
+		'emppassword' : null,
+		'empquestion' : null,
+		'empqans' : null
+	},
+	initialize:function(){
+	},
+	url:"codebase/addUser.php"
+});

@@ -57,6 +57,7 @@
 		<script type="text/javascript" src="js/modules/config/demo.js"></script>
 		<script type="text/javascript" src="js/modules/config/app.js"></script>
 		<script type="text/javascript" src="js/modules/config/loader.js"></script>
+		<script type="text/javascript" src="js/modules/config/utils.js"></script>
 
 		<script type="text/template" id="ta-classified-header-tpl">
 			<img class="logo" src="images/logo.png" alt="logo-img">
@@ -257,34 +258,35 @@
 
 		<script type="text/template" id="ta-classified-signup-tpl">
 			<div class="sign-up" name="signup-form">
+				<span class="signup-error-msg"></span>
 				<div>
 					<label><%=data.get("employeeName")%></label>
-					<input class="empname" type="text" name="empname" placeholder="Employee name" required>
+					<input type="text" name="empname" placeholder="Employee name" required>
 				</div>
 				<div>
 					<label><%=data.get("employeeId")%></label>
-					<input class="empid" type="text" placeholder="Emp ID" required>
+					<input name="empid" type="text" placeholder="Emp ID" required>
 				</div>
 				<label><%=data.get("emailId")%></label>
-				<input class="empemail" type="email" name="emailId" placeholder="EmailID" required>
+				<input type="email" name="empemail" placeholder="EmailID" required>
 				<div>
 					<label><%=data.get("password")%></label>
-					<input class="emppassword" type="password" placeholder="Password" required>
+					<input name="emppassword" type="password" placeholder="Password" required>
 				</div>
 				<div>
 					<label><%=data.get("confirmPassword")%></label>
-					<input class="confirm-password" type="password" placeholder="Confirm Password" required>
+					<input name="empconfpassword" class="confirm-password" type="password" placeholder="Confirm Password" required>
 				</div>
 				<div>
 					<label><%=data.get("securityQuestions")%></label>
-					<select id="selected-question" class="security-questions">
+					<select id="selected-question" class="security-questions" name="empquestion">
+						<option>Select one</option>
 					</select>
 				</div>
 				<div>
 					<label><%=data.get("answer")%></label>
-					<input type="text" class="security-question-answer">
+					<input type="text" class="security-question-answer" name="empqans">
 				</div>
-				<span class="signup-error-msg"></span>
 				<button type="submit" class="sign-up-btn"><%=data.get("signUp")%></button>
 			</div>
 		</script>
