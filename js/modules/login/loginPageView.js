@@ -33,6 +33,7 @@ classified.loginPageView = Backbone.View.extend({
 	},
 	submitForm:function(){
 		var data = {
+			'queryStr':'loginValidate',
 			'username':$(".username").val(),
 			'password':$(".password").val()
 		}
