@@ -15,7 +15,7 @@ classified.userHomePageView = Backbone.View.extend({
 	},
 	highlightLink:function(e){
 		$('.options a.highlight').removeClass();
-		var index = $(e.target).index();
+		var index = $(e.target).parent("a").index();
 		sessionStorage.setItem("index",index);
 		$('.options a').eq(index).addClass('highlight');
 	}
@@ -495,46 +495,66 @@ classified.postClassifiedView = Backbone.View.extend({
 	},
 	events:{
 		"click .submit-classified":"postClassified",
-		"load #image-upload":"showMsg"
+		"change input[type=file]":"prepareUpload"
 	},
-	showMsg:function(){
-		alert("hello");
-	},
+	prepareUpload:function(event){
+		this.files = null;
+     	this.files = event.target.files;
+     	$.each(this.files, function(index, file){
+      		alert(file.size);
+     	});
+    },
 	postClassified:function(){
-		var category = $(".categories-list-item option:selected").text();
-		category = category.substr(0,1).toUpperCase()+category.substr(1);
+		var category = $("#categories-list option:selected").text();
+		/*category = category.substr(0,1).toUpperCase()+category.substr(1);*/
 		var heading = $(".heading-classified").val();
 		heading = heading.substr(0,1).toUpperCase()+heading.substr(1);
-		var data = {
+
+		var data = new FormData();
+		$.each(this.files, function(key, value){
+			data.append(key, value);
+		});
+		data.append('empemail', sessionStorage.getItem("username"));
+		data.append('classifiedCategory', category);
+		data.append('classifiedHeading', heading);
+		data.append('classifiedNegotiable', $("#negotiable option:selected").val());
+		data.append('classifiedPrice', $(".price-classified").val());
+		data.append('classifiedDesc', $(".specification").val());
+
+		var classifiedData = {
 			empemail : sessionStorage.getItem("username"),
 			classifiedCategory : category,
 			classifiedHeading : heading,
-			classifiedDesc : $(".description").val()
+			classifiedNegotiable:$("#categories-list option:selected").text(),
+			classifiedPrice:$(".price-classified").val(),
+			classifiedDesc : $(".specification").val()
 		};
-		if($(".categories-list-item").val()=="" || $(".heading-classified").val()=="" || $(".description").val()==""){
+		if($(".categories-list-item").val()=="" || $(".heading-classified").val()=="" || $(".specification").val()==""){
 			$(".error-text").html("Fields can't be empty");
 		} else {
 			$.ajax({
 				type:"POST",
 				url:"codebase/postAClassified.php",
 				dataType:"JSON",
+				processData: false,
+      			contentType: false,
 				data:data,
 				success:function(resp){
 					var dataPresent = JSON.parse(sessionStorage.getItem("allClassifieds"));
 					if(dataPresent!=null){
-						dataPresent.allClassifieds.push(data);
+						dataPresent.allClassifieds.push(classifiedData);
 						sessionStorage.setItem("allClassifieds",JSON.stringify(dataPresent));
 					}
 					var myClassifieds = JSON.parse(sessionStorage.getItem("allMyClassifieds"));
 					if(myClassifieds!=null){
-						myClassifieds.allMyClassifieds.push(data);
+						myClassifieds.allMyClassifieds.push(classifiedData);
 						sessionStorage.setItem("allMyClassifieds",JSON.stringify(myClassifieds));
 					}
 					sessionStorage.setItem("index","1");
 					window.location = "#myclassifieds";
 				},
 				error:function(resp){
-					alert("error");
+					console.log(resp);
 				}
 			});
 		}

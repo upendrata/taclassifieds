@@ -36,7 +36,7 @@
 						}
 					}
 					if(count($files)==1){
-						$postAdQuery = "INSERT INTO taclassifieds(empemail, classifiedId, classifiedCategory, classifiedHeading, classifiedDesc, classifiedDisplay, classifiedNegotiable, classifiedPrice, classifiedImg1) VALUES ('$empemail', '$classifiedId', '$classifiedCategory', '$classifiedHeading', '$classifiedDesc', 1, '$classifiedNegotiable', '$classifiedPrice', '$files[0]')";
+						$postAdQuery = "INSERT INTO taclassifieds(empemail, classifiedId, classifiedCategory, classifiedHeading, classifiedDesc, classifiedDisplay, classifiedNegotiable, classifiedPrice, classifiedImg1, classifiedImg2, classifiedImg3, classifiedImg4, classifiedImg5) VALUES ('$empemail', '$classifiedId', '$classifiedCategory', '$classifiedHeading', '$classifiedDesc', 1, '$classifiedNegotiable', '$classifiedPrice', '$files[0]', null, null, null, null)";
 					}else if(count($files)==2){
 						$postAdQuery = "INSERT INTO taclassifieds(empemail, classifiedId, classifiedCategory, classifiedHeading, classifiedDesc, classifiedDisplay, classifiedNegotiable, classifiedPrice, classifiedImg1, classifiedImg2) VALUES ('$empemail', '$classifiedId', '$classifiedCategory', '$classifiedHeading', '$classifiedDesc', 1, '$classifiedNegotiable', '$classifiedPrice', '$files[0]', '$files[1]')";
 					}else if(count($files)==3){
@@ -46,8 +46,7 @@
 					}else if(count($files)==5){
 						$postAdQuery = "INSERT INTO taclassifieds(empemail, classifiedId, classifiedCategory, classifiedHeading, classifiedDesc, classifiedDisplay, classifiedNegotiable, classifiedPrice, classifiedImg1, classifiedImg2, classifiedImg3, classifiedImg4, classifiedImg5) VALUES ('$empemail', '$classifiedId', '$classifiedCategory', '$classifiedHeading', '$classifiedDesc', 1, '$classifiedNegotiable', '$classifiedPrice', '$files[0]', '$files[1]', '$files[2]', '$files[3]', '$files[4]')";
 					}
-					if(mysql_query($postAdQuery)){
-						
+					if(mysql_query($postAdQuery)){	
 						$flag = true;
 					}
 				}else{

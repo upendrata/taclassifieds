@@ -68,20 +68,21 @@
 				<% if(isLoggedIn){%>
 					<div class="user-info">Welcome <span class="user-name"></span></div>
 				<%}%>
+				<div id="menu-icon">
+					<span class="menu-img"></span>
+					<span class="menu-img"></span>
+					<span class="menu-img"></span>
+				</div>
 				<div class="links">
 					<% if(!isLoggedIn){%>
-						<div class="signin-links">
-							<a href="#login">Login</a>
-							<a href="#signup">SignUp</a>
-						</div>
+						<a href="#login">Login</a>
+						<a href="#signup">SignUp</a>
+						
 					<%}else{%>
-						<div class="logout-links">
-							<a href="#profile">My Profile</a>
-							<a class="logout-link" href="#home">LogOut</a>
-						</div>
+						<a href="#profile">My Profile</a>
+						<a class="logout-link" href="#home">LogOut</a>
 					<%}%>
 				</div>
-				<img id="menu-icon" src="images/menu-icon.png" alt="menu-icon">
 			</div>
 
 		</script>
@@ -108,12 +109,12 @@
 		<script type="text/template" id="ta-classified-login-tpl">
 			<div class="password-change-text">Your Password updated Successfully..!!</div>
 			<div class="signup-success-msg">Registration successfull.!!Please login..!!</div>
+			<div class="error-msg"></div>
 			<div class="login-page">
 				<input class="username" name="username" type="email" placeholder="ex:abc@techaspect.com" required/>
 				<i class="fa fa-user fa-lg user-icon"></i>
 				<input class="password" name="password" type="password" placeholder="Password" required/>
 				<i class="fa fa-lock fa-lg pwd-icon"></i>
-				<div class="error-msg"></div>
 				<button type="submit" class="login-btn"><%=data.get("logIn")%></button>
 				<a class="forgot-pwd-link" href="#forgotpwd"><%=data.get("forgotpwd")%></a>
 			</div>
@@ -145,9 +146,9 @@
 
 		<script type="text/template" id="ta-classified-menu-tpl">
 			<div class="options">
-				<a class="all-classifieds" href="#classifieds">All Classifieds</a>
-				<a class="my-classifieds highlight" href="#myclassifieds">My Classifieds</a>
-				<a class="post-classified" href="#postClassified">Post A Classified</a>
+				<a class="all-classifieds" href="#classifieds"><span>All Classifieds</span></a>
+				<a class="my-classifieds" href="#myclassifieds"><span>My Classifieds</span></a>
+				<a class="post-classified" href="#postClassified"><span>Post A Classified</span></a>
 			</div>
 		</script>
 
@@ -182,16 +183,25 @@
 				<div class="classified-data">
 					<div class="selected-classified-category"><%=data.classifiedCategory%></div>
 					<div class="selected-classified-heading"><%=data.classifiedHeading%></div>
+					<div class="selected-classified-price">Price - <span>Rs.<%=data.classifiedPrice%></span></div>
+					<div class="is-negotiable">Is Negotiable - 
+						<%if(data.classifiedNegotiable==1){%>
+							<span class="negotiable-option">Yes</span>
+						<%} else {%>
+							<span class="negotiable-option">No</span>
+						<%}%>
+					</div>
 					<div class="selected-classified-description"><%=data.classifiedDesc%></div>
 				</div>
 				<div class="image-section">
-					<img src="images/Classifieds_Banner.jpg" alt="">
+					<img src='images/classifieds/<%=data.classifiedImg1%>' alt="">
 				</div>
 			</div>
 		</script>
 
 		<script type="text/template" id="ta-classified-post-classified-tpl">
-			<form class="post-a-classified">
+			<div class="error-text"></div>
+			<form class="post-a-classified" enctype="multipart/form-data" method="POST">
 				<div>
 					<label for="heading">Heading</label>
 					<input type="text" name="Heading" class="heading-classified" placeholder="Heading" required>
@@ -202,23 +212,22 @@
 						<option>Select Category</option>
 					</select>
 				</div>
+				<label for="specifications">Specifications/Description</label>
+				<textarea name="specification" class="specification"></textarea>
 				<div>
 					<label for="price">Price</label>
 					<input type="text" name="price" class="price-classified" placeholder="Price" required>
 				</div>
 				<div class="is-negotiable">
 					<label>Is negotiable?</label>
-					<select id="categories-list" class="categories-list-item">
+					<select id="negotiable" class="categories-list-item">
 						<option>Select</option>
-						<option value="yes">Yes</option>
-						<option value="no">No</option>
+						<option value="1">Yes</option>
+						<option value="0">No</option>
 					</select>
 				</div>
-				<label for="specifications">Specifications/Description</label>
-				<textarea name="specification" class="specification"></textarea>
-				<label>Upload an Image</label>	
-				<input id="image-upload" type="file" name="pic" accept="image/*">	
-				<div class="error-text"></div>
+				<span>Upload an Image <span class="upload-restrict"> (Max no. of images is 5 and max filesize is 2MB)</span></span>	
+				<input id="image-upload" type="file" name="pic" multiple="multiple">	
 				<button class="submit-classified" type="button">Post</button>
 			</form>
 		</script>
