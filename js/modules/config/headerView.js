@@ -52,14 +52,11 @@ classified.headerView = Backbone.View.extend({
 		}
 	},
 	showMenu:function(){
-		$('.links').removeClass("hide");
+		this.$el.find(".links").slideToggle('slow');
 		if($(".links").hasClass("slide-menu")){
 			$('.links').removeClass("slide-menu");
-			$('.links').addClass("hide");
 		} else {
 			$('.links').addClass("slide-menu");
-			$(".signin-links").show();
-			$(".logout-links").show();
 		}
 	}
 });
