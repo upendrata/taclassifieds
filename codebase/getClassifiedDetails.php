@@ -17,7 +17,7 @@
 				if($dbConnect->connectToDB()){
 					$search_query = "select * from taclassifieds where classifiedId = '$classifiedId'";
 					$search_result = mysql_query($search_query);
-					$classifiedsData = array();  $classifiedItem = array(); $count=0;
+					$classifiedsData = array();  $classifiedItem = array(); $count=0; $classifiedImgs = array();
 					while ($search_row = mysql_fetch_array($search_result)) {
 						$flag = true;
 						$classifiedItem['classifiedHeading'] = $search_row['classifiedHeading'];
@@ -25,11 +25,12 @@
 						$classifiedItem['classifiedDesc'] = $search_row['classifiedDesc'];
 						$classifiedItem['classifiedNegotiable'] = $search_row['classifiedNegotiable'];
 						$classifiedItem['classifiedPrice'] = $search_row['classifiedPrice'];
-						$classifiedItem['classifiedImg1'] = $search_row['classifiedImg1'];
-						$classifiedItem['classifiedImg2'] = $search_row['classifiedImg2'];
-						$classifiedItem['classifiedImg3'] = $search_row['classifiedImg3'];
-						$classifiedItem['classifiedImg4'] = $search_row['classifiedImg4'];
-						$classifiedItem['classifiedImg5'] = $search_row['classifiedImg5'];
+						array_push($classifiedImgs, $search_row['classifiedImg1']);
+						array_push($classifiedImgs, $search_row['classifiedImg2']);
+						array_push($classifiedImgs, $search_row['classifiedImg3']);
+						array_push($classifiedImgs, $search_row['classifiedImg4']);
+						array_push($classifiedImgs, $search_row['classifiedImg5']);
+						$classifiedItem['classifiedImgs'] = $classifiedImgs;
 						$classifiedsData[$count++] = $classifiedItem;
 					}
 				}else{
