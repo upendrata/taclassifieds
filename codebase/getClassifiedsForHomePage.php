@@ -41,7 +41,7 @@
 				$response['status'] = 404;
 				header('HTTP/1.1 '.$response['status'].' '.$http_response_code[ $response['status'] ]);
 				
-				$res = '{"status": false, "responseText": "Something went wrong not able to fetch Data!..."}';
+				$res = '{"status": false, "responseText": "There are No Classifieds at this time!..."}';
 				echo $res;
 			}
 		}
