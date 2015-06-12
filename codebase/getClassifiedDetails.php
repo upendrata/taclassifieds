@@ -25,11 +25,21 @@
 						$classifiedItem['classifiedDesc'] = $search_row['classifiedDesc'];
 						$classifiedItem['classifiedNegotiable'] = $search_row['classifiedNegotiable'];
 						$classifiedItem['classifiedPrice'] = $search_row['classifiedPrice'];
-						array_push($classifiedImgs, $search_row['classifiedImg1']);
-						array_push($classifiedImgs, $search_row['classifiedImg2']);
-						array_push($classifiedImgs, $search_row['classifiedImg3']);
-						array_push($classifiedImgs, $search_row['classifiedImg4']);
-						array_push($classifiedImgs, $search_row['classifiedImg5']);
+						if($search_row['classifiedImg1'] != null){
+							array_push($classifiedImgs, $search_row['classifiedImg1']);
+						}
+						if($search_row['classifiedImg2'] != null){
+							array_push($classifiedImgs, $search_row['classifiedImg2']);
+						}
+						if($search_row['classifiedImg3'] != null){
+							array_push($classifiedImgs, $search_row['classifiedImg3']);
+						}
+						if($search_row['classifiedImg4'] != null){
+							array_push($classifiedImgs, $search_row['classifiedImg4']);
+						}
+						if($search_row['classifiedImg5'] != null){
+							array_push($classifiedImgs, $search_row['classifiedImg5']);
+						}
 						$classifiedItem['classifiedImgs'] = $classifiedImgs;
 						$classifiedsData[$count++] = $classifiedItem;
 					}
