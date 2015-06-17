@@ -16,7 +16,30 @@ classified.signUpPageView = Backbone.View.extend({
 	events:{
 		"click .sign-up-btn":"addClassifiedUser",
 		"change input":"eventHandler",
-		"change select": "eventHandler"
+		"change select": "eventHandler",
+		"change input[type=email]":"validateUserName"
+	},
+	validateUserName:function(e){
+		var data={
+			queryStr:"userExists",
+			username:$(".empemail").val()
+		};
+		if(data.empemail!=""){
+			$.ajax({
+				type:"POST",
+				url:"codebase/validateUser.php",
+				dataType:"JSON",
+				data:data,
+				success:function(resp){
+					alert(resp.responseJSON.responseText);
+					$(".signup-error-msg").html(resp.responseJSON.responseText);
+				},
+				error:function(resp){
+					console.log(resp);
+					$(".signup-error-msg").html(resp.responseJSON.responseText);
+				}
+			});
+		}
 	},
 	eventHandler : function(e){
 		var obj = $(e.currentTarget);
@@ -51,6 +74,7 @@ classified.signUpPageView = Backbone.View.extend({
 			});
 		}else{
 			utils.buildErrors(errorsList, this.$el.find(".signup-error-msg"));
+			$("html, body").animate({ scrollTop: 0 }, "slow");
 		}
 	}
 });

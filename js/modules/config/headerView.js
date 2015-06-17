@@ -12,25 +12,13 @@ classified.headerView = Backbone.View.extend({
 		if(username!=null){
 			username = username.substring(0,1).toUpperCase()+username.substring(1,(username.indexOf('@')-1))+" "+username.substring(username.indexOf('@')-1,username.indexOf('@')).toUpperCase();
 		}
-		$(".user-name").html(username);
-		var height = $(window).height();
-		$('#pagecontainer').css({
-			"min-height":"height"
-		});
+		this.$el.find(".user-name").html(username);
 	},
 	events:{
 		"click .logo":"showHome",
 		"click .home-link":"showHome",
 		"click .logout-link":"showHomePage",
 		"click #menu-icon":"showMenu",
-		"click .signin-links a":"hideMenu",
-		"click .logout-links a":"hideMenu"
-	},
-	hideMenu:function(){
-		$('.links').removeClass("slide-menu");
-		if(window.innerWidth<=767){
-			$(".links").addClass("hide");
-		}
 	},
 	showHome:function(){
 		this.isLogged();
@@ -53,11 +41,6 @@ classified.headerView = Backbone.View.extend({
 	},
 	showMenu:function(){
 		this.$el.find(".links").slideToggle('slow');
-		if($(".links").hasClass("slide-menu")){
-			$('.links').removeClass("slide-menu");
-		} else {
-			$('.links').addClass("slide-menu");
-		}
 	}
 });
 

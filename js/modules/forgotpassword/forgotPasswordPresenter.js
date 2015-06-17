@@ -13,7 +13,8 @@ classifieds.forgotPasswordPagePresenter = function(){
 					dataType:"JSON",
 					data:data,
 					success:function(resp){
-						classifieds.forgotpwdObj = new classified.forgotPwdView({el:"#page-container",template:"#ta-classified-forgot-password-tpl",model:signUpPageRef});
+						classifieds.signUpPageRef = new classifieds.signUpModel(data.signup);
+						classifieds.forgotpwdObj = new classified.forgotPwdView({el:"#page-container",template:"#ta-classified-forgot-password-tpl"});
 					},
 					error:function(resp){
 						$(".error-msg").html(resp.responseJSON.responseText);

@@ -91,7 +91,8 @@ classifieds.userHomePagePresenter = function(){
 		},
 		showClassifiedForm:function(){
 			renderViews();
-			var postClassifiedObj = new classified.postClassifiedView({el:"#classifieds-container",template:"#ta-classified-post-classified-tpl",model:categoriesRef});		
+			var postFormModelRef = new classifieds.postClassifiedFormModel();
+			var postClassifiedObj = new classified.postClassifiedView({el:"#classifieds-container",template:"#ta-classified-post-classified-tpl",model:categoriesRef,postFormModel:postFormModelRef});		
 		}
 	}
 }

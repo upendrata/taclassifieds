@@ -54,3 +54,18 @@ var categoriesModel = Backbone.Model.extend({
 	}
 });
 var categoriesRef = new categoriesModel(data.categories);
+
+
+classifieds.postClassifiedFormModel = Backbone.Model.extend({
+	defaults:{
+		'heading':null,
+		'category':null,
+		'specification':null,
+		'price':null,
+		'negotiable':null
+	},
+	initialize:function(){
+
+	},
+	url:"codebase/postAClassified.php"
+});

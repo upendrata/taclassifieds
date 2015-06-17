@@ -17,3 +17,9 @@ classifieds.signUpFormModel = Backbone.Model.extend({
 	},
 	url:"codebase/addUser.php"
 });
+
+classifieds.signupPageModel = Backbone.Model.extend({
+	initialize:function(){
+
+	}
+});
