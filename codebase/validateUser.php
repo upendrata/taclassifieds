@@ -2,17 +2,20 @@
 	@include('dbConnect.php');
 	
 	$obj = new classifiedsUser();
-	$type = $_POST['queryStr'];
+	$post_data = file_get_contents("php://input");
+	$post_data = json_decode($post_data, TRUE);
+	
+	$type = $post_data['queryStr'];
 	
 	// Define HTTP responses
     $http_response_code = array(200 => 'OK', 400 => 'Bad Request', 401 => 'Unauthorized', 403 => 'Forbidden', 404 => 'Not Found', 405 => 'Error');
 	header('Content-Type: application/json; charset=utf-8');
 	if($type === "loginValidate"){
-		$username = $_POST['username'];
-		$password = $_POST['password'];
+		$username = $post_data['username'];
+		$password = $post_data['password'];
 		return $obj->validateUser($username, $password, $http_response_code);
 	}else if($type === "userExists"){
-		$username = $_POST['username'];
+		$username = $post_data['username'];
 		return $obj->isUserExists($username, $http_response_code);
 	}
 	

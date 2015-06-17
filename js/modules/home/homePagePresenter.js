@@ -18,6 +18,7 @@ classifieds.homePagePresenter = function(){
 					var classifiedObj = new classifiedCollection(resp);
 					var homePage = new classifieds.homeView({el:'#page-container',template:"#ta-classified-homepage-tpl"});
 					$('.classifieds-list').html(resp.responseJSON.responseText);
+					$(".more-classifieds").hide();
 				},
 				complete:function(){
 					if(sessionStorage.getItem("username")!=null){

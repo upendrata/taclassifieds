@@ -8,6 +8,8 @@ var utils = (function(){
 		"empquestion" : "Please Select Security Question",
 		"empqans" : "Please Enter Answer for Security Question",
 		"passwordsnotmatch" : "Password and Confirmation password are not same",
+		"username":"Please Enter Username",
+		"password":"Please Enter Password"
 	}
 	return {
 		buildErrors : function(errorsList, target){

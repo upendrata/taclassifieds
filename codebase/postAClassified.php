@@ -12,11 +12,11 @@
 	class taClassifieds{
 		public function postAClassified($http_response_code){
 			$flag = false;
+			$mydate=getdate(date("U"));
+			$classifiedId = $mydate['mday'].$mydate['mon'].$mydate['year'].$mydate['hours'].$mydate['minutes'].$mydate['seconds'];
 			$dbConnect = new taClassifiedDBConnect();
 			if($dbConnect->authenticateDB()){
 				if($dbConnect->connectToDB()){
-					$mydate=getdate(date("U"));
-					$classifiedId = $mydate['mday'].$mydate['mon'].$mydate['year'].$mydate['hours'].$mydate['minutes'].$mydate['seconds'];
 				
 					$empemail = mysql_real_escape_string($_POST['empemail']); $classifiedCategory = mysql_real_escape_string($_POST['classifiedCategory']);
 					$classifiedHeading = mysql_real_escape_string($_POST['classifiedHeading']); $classifiedDesc = mysql_real_escape_string($_POST['classifiedDesc']); 
@@ -59,7 +59,7 @@
 				 // Set HTTP Response
 				$response['status'] = 200;
 				header('HTTP/1.1 '.$response['status'].' '.$http_response_code[ $response['status'] ]);
-				$res = '{"status":true, "url":"#myclassifieds", "responseText":"Successfully Posted your Classified!..."}';
+				$res = '{"status":true, "url":"#myclassifieds", "id":"'.$classifiedId.'", "responseText":"Successfully Posted your Classified!..."}';
 			}else{
 				 // Set HTTP Response
 				$response['status'] = 404;

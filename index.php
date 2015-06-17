@@ -23,11 +23,7 @@
 		<script type="text/javascript">
 			$(function(){
 				var data = {};
-				if(sessionStorage.getItem("username")!=null){
-					data.isLoggedIn = true;
-				} else {
-					data.isLoggedIn = false;
-				}
+				data.isLoggedIn = (sessionStorage.getItem("username")!=null)?true:false;
 				classified.modelRef = new classified.headerModel(data);
 				var headerObj = new classified.headerView({el:".header-container",template:'#ta-classified-header-tpl', model:classified.modelRef});
 				var footerObj = new classified.footerView({el:".footer-container",template:"#ta-classified-footer-tpl"});
@@ -54,37 +50,40 @@
 		<script type="text/javascript" src="js/modules/userhome/userHomePageView.js"></script>
 		<script type="text/javascript" src="js/modules/userhome/userHomePageModel.js"></script>
 		<script type="text/javascript" src="js/modules/userhome/userHomePagePresenter.js"></script>
+		<script type="text/javascript" src="js/modules/classifiedDetails/classifiedDetailsPresenter.js"></script>
+		<script type="text/javascript" src="js/modules/classifiedDetails/classifiedDetailsView.js"></script>
 		<script type="text/javascript" src="js/modules/config/demo.js"></script>
 		<script type="text/javascript" src="js/modules/config/app.js"></script>
 		<script type="text/javascript" src="js/modules/config/loader.js"></script>
 		<script type="text/javascript" src="js/modules/config/utils.js"></script>
 
 		<script type="text/template" id="ta-classified-header-tpl">
-			<img class="logo" src="images/logo.png" alt="logo-img">
-			<img class="home-link" src="images/ta-logo.png" alt="logo-img">
-			<h1 class="classifieds-heading">Class<span class="heading">ifieds</span></h1>
-			<h1 class="heading-mobile">TA Classifieds</h1>
-			<div class="user-profile">
-				<% if(isLoggedIn){%>
-					<div class="user-info">Welcome <span class="user-name"></span></div>
-				<%}%>
-				<div id="menu-icon">
-					<span class="menu-img"></span>
-					<span class="menu-img"></span>
-					<span class="menu-img"></span>
-				</div>
-				<div class="links">
-					<% if(!isLoggedIn){%>
-						<a href="#login">Login</a>
-						<a href="#signup">SignUp</a>
-						
-					<%}else{%>
-						<a href="#profile">My Profile</a>
-						<a class="logout-link" href="#home">LogOut</a>
+			<div class="logo-container">
+				<img class="logo" src="images/logo.png" alt="logo-img">
+				<img class="home-link" src="images/ta-logo.png" alt="logo-img">
+				<h1 class="classifieds-heading"><a href="#home">Class<span class="heading">ifieds</span></a></h1>
+				<h1 class="heading-mobile"><a href="#home">TA Classifieds</a></h1>
+				<div class="user-profile">
+					<% if(isLoggedIn){%>
+						<div class="user-info">Welcome <span class="user-name"></span></div>
 					<%}%>
+					<div id="menu-icon">
+						<span class="menu-img"></span>
+						<span class="menu-img"></span>
+						<span class="menu-img"></span>
+					</div>
 				</div>
 			</div>
-
+			<div class="links">
+				<% if(!isLoggedIn){%>
+					<a href="#login">Login <i class="fa fa-angle-right fa-lg"></i></a>
+					<a href="#signup">SignUp <i class="fa fa-angle-right fa-lg"></i></a>
+					
+				<%}else{%>
+					<a href="#profile">My Profile <i class="fa fa-angle-right fa-lg"></i></a>
+					<a class="logout-link" href="#home">LogOut <i class="fa fa-angle-right fa-lg"></i></a>
+				<%}%>
+			</div>
 		</script>
 
 		<script type="text/template" id="ta-classified-homepage-tpl">
@@ -97,7 +96,7 @@
 				<div class="latest-classifieds">
 					<h3>Latest Classifieds</h3>
 					<ol class="classifieds-list"></ol>
-					<a href="javascript:void(0)" class="more-classifieds">All Classifieds</a>
+					<a href="javascript:void(0)" class="more-classifieds">View All Classifieds</a>
 				</div>
 			</section>
 		</script>
@@ -126,16 +125,6 @@
 				<select id="selected-question" class="security-ques"></select>
 				<label>Enter your answer</label>
 				<input type="password" class="security-ans">
-				<button class="continue">Continue</button>
-				<div class="forgot-pwd-error-msg"></div>
-				<div class="password-fields">
-					<label>New Password</label>
-					<input class="new-pwd" name="password" type="password" placeholder="New password" required/> 
-					<label>Confirm Password</label>
-					<input class="confirm-pwd" name="confirm password" type="password" placeholder="Confirm Password" required/>
-				</div>
-				<div class="password-error-msg"></div>
-				<button class="change-pwd">Change Password</button>
 			</div>
 		</script>
 
@@ -194,7 +183,15 @@
 					<div class="selected-classified-description"><%=data.classifiedDesc%></div>
 				</div>
 				<div class="image-section">
-					<img src='images/classifieds/<%=data.classifiedImg1%>' alt="">
+			    	<div id="img-preview"><img src="images/classifieds/<%=data.classifiedFirstImg%>"/></div>
+			    		<div class="thumg-images clearfix">
+			    			<%_.each(data.classifiedImgs, function(item){
+			    				if(item != null){%>
+			        				<img class='thumb-img' src='images/classifieds/<%=item%>' alt="classified image" />
+			       				<%}
+			      			});%>
+			     		</div>
+			    	</div>
 				</div>
 			</div>
 		</script>
@@ -204,11 +201,11 @@
 			<form class="post-a-classified" enctype="multipart/form-data" method="POST">
 				<div>
 					<label for="heading">Heading</label>
-					<input type="text" name="Heading" class="heading-classified" placeholder="Heading" required>
+					<input type="text" name="heading" class="heading-classified" placeholder="Heading" required>
 				</div>
 				<div>
 					<label for="category">Category</label>
-					<select id="categories-list" class="categories-list-item">
+					<select name="category" id="categories-list" class="categories-list-item">
 						<option>Select Category</option>
 					</select>
 				</div>
@@ -220,7 +217,7 @@
 				</div>
 				<div class="is-negotiable">
 					<label>Is negotiable?</label>
-					<select id="negotiable" class="categories-list-item">
+					<select name="negotiable" id="negotiable" class="categories-list-item">
 						<option>Select</option>
 						<option value="1">Yes</option>
 						<option value="0">No</option>
@@ -277,7 +274,7 @@
 					<input name="empid" type="text" placeholder="Emp ID" required>
 				</div>
 				<label><%=data.get("emailId")%></label>
-				<input type="email" name="empemail" placeholder="EmailID" required>
+				<input type="email" class="empemail" name="empemail" placeholder="EmailID" required>
 				<div>
 					<label><%=data.get("password")%></label>
 					<input name="emppassword" type="password" placeholder="Password" required>
@@ -298,6 +295,23 @@
 				</div>
 				<button type="submit" class="sign-up-btn"><%=data.get("signUp")%></button>
 			</div>
+		</script>
+
+		<script type="text/template" id="ta-classified-continue-button-tpl">
+			<button class="continue">Continue</button>
+		</script>
+
+		<script type="text/template" id="ta-classified-change-password-tpl">
+			<div class="password-fields">
+				<label>New Password</label>
+				<input class="new-pwd" name="password" type="password" placeholder="New password" required/> 
+				<label>Confirm Password</label>
+				<input class="confirm-pwd" name="confirm password" type="password" placeholder="Confirm Password" required/>
+			</div>
+		</script>
+
+		<script type="text/template" id="ta-classified-change-pwd-button-tpl">
+			<button class="change-pwd">Change Password</button>
 		</script>
 
 		<script type="text/template" id="ta-classifieds-security-questions-tpl">

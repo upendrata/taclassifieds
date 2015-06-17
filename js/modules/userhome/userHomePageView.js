@@ -14,10 +14,10 @@ classified.userHomePageView = Backbone.View.extend({
 		"click .options a":"highlightLink"
 	},
 	highlightLink:function(e){
-		$('.options a.highlight').removeClass();
+		this.$el.find('.options a.highlight').removeClass();
 		var index = $(e.target).parent("a").index();
 		sessionStorage.setItem("index",index);
-		$('.options a').eq(index).addClass('highlight');
+		this.$el.find('.options a').eq(index).addClass('highlight');
 	}
 });
 
@@ -50,8 +50,8 @@ classified.listView = Backbone.View.extend({
 	render:function(){
 		this.$el.html(_.template($(this.template).html()));
 		if(this.model.attributes.allClassifieds.length<=20){
-			$('.previous').hide();
-			$('.next').hide();
+			this.$el.find('.previous').hide();
+			this.$el.find('.next').hide();
 		} 
 		this.renderAllClassifieds();
 		this.renderCategories();
@@ -60,7 +60,14 @@ classified.listView = Backbone.View.extend({
 		var categoriesObj = new classified.categoriesView({el:"#categories-filter",template:"#ta-classified-categories-list-tpl",model:categoriesRef});
 	},
 	renderAllClassifieds:function(){
-		var allClassifieds = new classified.allClassifiedsView({el:".all-classifieds-list",template:"#ta-classified-all-classifieds-tpl",model:this.model,startValue:this.startValue,endValue:this.endValue});
+		var url=window.location;
+		var hash = window.location.hash.substring(1);
+		if(hash=="classified/:mailIndex"){
+			var classifiedDetailsObj = new classifieds.classifiedDetailsPresenter();
+			classifiedDetailsObj.showClassifiedDetails();
+		} else {
+			var allClassifieds = new classified.allClassifiedsView({el:".all-classifieds-list",template:"#ta-classified-all-classifieds-tpl",model:this.model,startValue:this.startValue,endValue:this.endValue});
+		}
 	},
 	events :{
 		"click .next":"showNextClassifieds",
@@ -80,7 +87,7 @@ classified.listView = Backbone.View.extend({
 		if(this.endValue<=(JSON.parse(sessionStorage.getItem("allClassifieds")).allClassifieds.length)){
 			this.startValue = this.startValue+20;
 			this.endValue = this.endValue+20;
-			$('.all-classifieds-list').empty();
+			this.$el.find('.all-classifieds-list').empty();
 			var allClassifieds = new classified.allClassifiedsView({el:".all-classifieds-list",template:"#ta-classified-all-classifieds-tpl",model:this.model,startValue:this.startValue,endValue:this.endValue});
 		}
 		this.showButtons();
@@ -89,7 +96,7 @@ classified.listView = Backbone.View.extend({
 		if(this.startValue-20>=0){
 			this.startValue = this.startValue-20;
 			this.endValue = this.endValue-20;
-			$('.all-classifieds-list').empty();
+			this.$el.find('.all-classifieds-list').empty();
 			var allClassifieds = new classified.allClassifiedsView({el:".all-classifieds-list",template:"#ta-classified-all-classifieds-tpl",model:this.model,startValue:this.startValue,endValue:this.endValue});
 		}
 		this.showButtons();
@@ -97,14 +104,14 @@ classified.listView = Backbone.View.extend({
 	showButtons:function(){
 		if(sessionStorage.getItem("allClassifieds")!=null){
 			if(this.endValue>=(JSON.parse(sessionStorage.getItem("allClassifieds")).allClassifieds.length)){
-				$('.next').hide();
+				this.$el.find('.next').hide();
 			} else {
-				$('.next').show();
+				this.$el.find('.next').show();
 			}
 			if(this.startValue==0){
-				$('.previous').hide();
+				this.$el.find('.previous').hide();
 			} else {
-				$('.previous').show();
+				this.$el.find('.previous').show();
 			}
 		}
 	}
@@ -162,18 +169,20 @@ classified.allClassifiedsView = Backbone.View.extend({
 		}
 		var indexValue = (index+this.startValue)-1;
 		var startValue = this.startValue;
+		var id=JSON.parse(sessionStorage.getItem("allClassifieds")).allClassifieds[indexValue].classifiedId;
 		/*alert(indexValue);*/
 		$.ajax({
 			type:"GET",
 			url:"codebase/getClassifiedDetails.php",
 			dataType:"JSON",
 			data:{
-				classifiedId : JSON.parse(sessionStorage.getItem("allClassifieds")).allClassifieds[indexValue].classifiedId
+				classifiedId : id
 			},
 			success:function(resp){
 				console.log(resp);
 				classified.classifiedDetailsObj = new classifieds.classifiedDetailsModel(resp);
-				classified.classifiedDetailsViewObj = new classifieds.classifiedDetailsView({el:"#classifieds-container",template:"#ta-classified-details-tpl",model:classified.classifiedDetailsObj,indexValue:index,startValue:startValue});
+				sessionStorage.setItem("classifiedDetails",JSON.stringify(classified.classifiedDetailsObj));
+				window.location="#classified/:"+id;
 			},
 			error:function(resp){
 				console.log(resp);
@@ -182,25 +191,6 @@ classified.allClassifiedsView = Backbone.View.extend({
 	}
 });
 
-classifieds.classifiedDetailsView = Backbone.View.extend({
-	initialize:function(options){
-		this.options = options || {};
-		this.template = this.options.template;
-		this.indexValue = this.options.indexValue;
-		this.startValue = this.options.startValue;
-		this.render();
-	},
-	render:function(){
-		this.$el.html(_.template($(this.template).html())({data:this.model.attributes[0]}));
-	},
-	events :{
-		"click .back-option":"showClassifiedsPage"
-	},
-	showClassifiedsPage:function(){
-		var endValue = this.startValue+19;
-		classifieds.listObj = new classified.listView({el:"#classifieds-container",template:"#ta-classified-list-base-tpl",model:classifieds.modelRef,startValue:this.startValue,endValue:endValue});
-	}
-});
 
 classified.myListView = Backbone.View.extend({
 	initialize:function(options){
@@ -213,8 +203,8 @@ classified.myListView = Backbone.View.extend({
 	render:function(){
 		this.$el.html(_.template($(this.template).html()));
 		if(this.model.attributes.allMyClassifieds.length<=20){
-			$('.previous').hide();
-			$('.next').hide();
+			this.$el.find('.previous').hide();
+			this.$el.find('.next').hide();
 		} 
 		this.renderAllMyClassifieds();
 		this.renderCategories();
@@ -243,7 +233,7 @@ classified.myListView = Backbone.View.extend({
 		if(this.endValue<=(JSON.parse(sessionStorage.getItem("allMyClassifieds")).allMyClassifieds.length)){
 			this.startValue = this.startValue+20;
 			this.endValue = this.endValue+20;
-			$('.all-classifieds-list').empty();
+			this.$el.find('.all-classifieds-list').empty();
 			var myClassifieds = new classified.myClassifiedsView({el:".all-classifieds-list",template:"#ta-classified-my-classifieds-tpl",model:this.model,startValue:this.startValue,endValue:this.endValue});
 		}
 		this.showButtons();
@@ -252,7 +242,7 @@ classified.myListView = Backbone.View.extend({
 		if(this.startValue-20>=0){
 			this.startValue = this.startValue-20;
 			this.endValue = this.endValue-20;
-			$('.all-classifieds-list').empty();
+			this.$el.find('.all-classifieds-list').empty();
 			var myClassifieds = new classified.myClassifiedsView({el:".all-classifieds-list",template:"#ta-classified-my-classifieds-tpl",model:this.model,startValue:this.startValue,endValue:this.endValue});
 		}
 		this.showButtons();
@@ -260,18 +250,20 @@ classified.myListView = Backbone.View.extend({
 	showButtons:function(){
 		if(sessionStorage.getItem("allClassifieds")!=null){
 			if(this.endValue>=(JSON.parse(sessionStorage.getItem("allClassifieds")).allClassifieds.length)){
-				$('.next').hide();
+				this.$el.find('.next').hide();
 			} else {
-				$('.next').show();
+				this.$el.find('.next').show();
 			}
 			if(this.startValue==0){
-				$('.previous').hide();
+				this.$el.find('.previous').hide();
 			} else {
-				$('.previous').show();
+				this.$el.find('.previous').show();
 			}
 		}
 	}
 });
+
+
 classified.selectedClassifiedsView = Backbone.View.extend({
 	initialize:function(options){
 		this.options = options || {};
@@ -296,6 +288,8 @@ classified.selectedClassifiedsView = Backbone.View.extend({
 		}
 	}
 });
+
+
 classified.myClassifiedsView = Backbone.View.extend({
 	initialize:function(options){
 		this.options = options || {};
@@ -323,25 +317,26 @@ classified.myClassifiedsView = Backbone.View.extend({
 		if(source.is("li")){
 			var index = source.index();
 		} else if(source.is("icons span")){
-			/*var index = (source.parent('.my-classified-item').index())+1;*/
 			return false;
 		} else {
 			var index = (source.parent('.my-classified-item').index());
 		}
 		var indexValue = (index+this.startValue);
 		var startValue = this.startValue;
+		var id=JSON.parse(sessionStorage.getItem("allMyClassifieds")).allMyClassifieds[indexValue].classifiedId;
 		/*alert(indexValue);*/
 		$.ajax({
 			type:"GET",
 			url:"codebase/getClassifiedDetails.php",
 			dataType:"JSON",
 			data:{
-				classifiedId : JSON.parse(sessionStorage.getItem("allMyClassifieds")).allMyClassifieds[indexValue].classifiedId
+				classifiedId : id
 			},
 			success:function(resp){
 				console.log(resp);
-				classified.myClassifiedDetailsObj = new classifieds.myClassifiedDetailsModel(resp);
-				classified.myClassifiedDetailsViewObj = new classifieds.myClassifiedDetailsView({el:"#classifieds-container",template:"#ta-classified-details-tpl",model:classified.myClassifiedDetailsObj,indexValue:index,startValue:startValue});
+				classified.classifiedDetailsObj = new classifieds.classifiedDetailsModel(resp);
+				sessionStorage.setItem("classifiedDetails",JSON.stringify(classified.classifiedDetailsObj));
+				window.location="#classified/:"+id;
 			},
 			error:function(resp){
 				console.log(resp);
@@ -397,6 +392,8 @@ classified.myClassifiedsView = Backbone.View.extend({
 		});
 	}
 });
+
+
 classified.updateClassifiedView = Backbone.View.extend({
 	initialize:function(options){
 		this.options = options || {};
@@ -408,7 +405,7 @@ classified.updateClassifiedView = Backbone.View.extend({
 	render:function(){
 		this.$el.html(_.template($(this.template).html())({data:this.data}));
 		var value=$('.edit-categories-list').find('option[text="this.data[0].classifiedCategory"]').val();
-		$(".edit-a-classified").prepend("<img class='back-option' src='images/back.png'/>");
+		this.$el.find(".edit-a-classified").prepend("<img class='back-option' src='images/back.png'/>");
 		var category=$(".edit-categories-list-item").val(value);
 		var description=$(".edit-heading-classified").val(this.data[0].classifiedHeading);
 		var specification=$(".edit-specification").val(this.data[0].classifiedDesc);
@@ -439,7 +436,7 @@ classified.updateClassifiedView = Backbone.View.extend({
 			classifiedDesc : $(".edit-description").val()
 		};
 		if($(".edit-categories-list-item").val()=="" && $(".edit-heading").val()=="" && $(".edit-description").val()==""){
-			$(".error-text").html("Fields can't be empty");
+			this.$el.find(".error-text").html("Fields can't be empty");
 		} else {
 			$.ajax({
 				type:"POST",
@@ -461,6 +458,8 @@ classified.updateClassifiedView = Backbone.View.extend({
 		}
 	}
 });
+
+
 classifieds.myClassifiedDetailsView = Backbone.View.extend({
 	initialize:function(options){
 		this.options = options || {};
@@ -480,10 +479,13 @@ classifieds.myClassifiedDetailsView = Backbone.View.extend({
 		classifieds.listObj = new classified.myListView({el:"#classifieds-container",template:"#ta-classified-list-base-tpl",model:classifieds.modelRefObj,startValue:this.startValue,endValue:endValue});
 	}
 });
+
+
 classified.postClassifiedView = Backbone.View.extend({
 	initialize:function(options){
 		this.options = options || {};
 		this.template = this.options.template;
+		this.postFormModel = this.options.postFormModel;
 		this.render();
 	},
 	render:function(){
@@ -495,32 +497,54 @@ classified.postClassifiedView = Backbone.View.extend({
 	},
 	events:{
 		"click .submit-classified":"postClassified",
-		"change input[type=file]":"prepareUpload"
+		"change input[type=file]":"prepareUpload",
+		"change input":"eventHandler",
+		"change select":"eventHandler",
+		"change textarea":"eventHandler"
+	},
+	eventHandler : function(e){
+		var obj = $(e.currentTarget);
+		this.postFormModel.set(obj.attr('name'), $.trim(obj.val()));
+	},
+	validateFields : function(){
+		var errorMsg = [];
+		$.each(this.postFormModel.toJSON(), function(key, value){
+			if(value === "" || value === null){
+				errorMsg.push(key);
+			}
+		});
+		return errorMsg;
 	},
 	prepareUpload:function(event){
 		this.files = null;
      	this.files = event.target.files;
-     	$.each(this.files, function(index, file){
-      		alert(file.size);
-     	});
+     	if(this.files.length>5){
+     		this.$el.find(".submit-classified").attr("disabled",true);
+     		this.$el.find(".error-text").html("Can't Select more than 5 images");
+     	} else {
+     		var val = 1024000;
+	     	$.each(this.files, function(index, file){
+	      		if(file.size/val>2){
+	      			this.$el.find(".submit-classified").attr("disabled",true);
+	      			this.$el.find(".error-text").html("file size can't be more than 2MB");
+	      		} else {
+	      			this.$el.find(".submit-classified").attr("disabled",false);
+	      			this.$el.find(".error-text").empty();
+	      		}
+	     	});
+     	}
     },
 	postClassified:function(){
 		var category = $("#categories-list option:selected").text();
-		/*category = category.substr(0,1).toUpperCase()+category.substr(1);*/
 		var heading = $(".heading-classified").val();
 		heading = heading.substr(0,1).toUpperCase()+heading.substr(1);
-
-		var data = new FormData();
-		$.each(this.files, function(key, value){
-			data.append(key, value);
-		});
-		data.append('empemail', sessionStorage.getItem("username"));
-		data.append('classifiedCategory', category);
-		data.append('classifiedHeading', heading);
-		data.append('classifiedNegotiable', $("#negotiable option:selected").val());
-		data.append('classifiedPrice', $(".price-classified").val());
-		data.append('classifiedDesc', $(".specification").val());
-
+		if(this.files==null){
+			this.$el.find(".error-text").html("no files uploaded");
+		} else {
+			$.each(this.files, function(key, value){
+				this.postFormModel.set(key, value);
+			});
+		}
 		var classifiedData = {
 			empemail : sessionStorage.getItem("username"),
 			classifiedCategory : category,
@@ -529,17 +553,16 @@ classified.postClassifiedView = Backbone.View.extend({
 			classifiedPrice:$(".price-classified").val(),
 			classifiedDesc : $(".specification").val()
 		};
-		if($(".categories-list-item").val()=="" || $(".heading-classified").val()=="" || $(".specification").val()==""){
-			$(".error-text").html("Fields can't be empty");
-		} else {
-			$.ajax({
+
+		var errorsList = this.validateFields(),self=this;
+		if(errorsList.length === 0){
+			this.postFormModel.save(null,{
 				type:"POST",
-				url:"codebase/postAClassified.php",
 				dataType:"JSON",
 				processData: false,
       			contentType: false,
-				data:data,
-				success:function(resp){
+				success:function(model,resp){
+					classifiedData.classifiedId = resp.id;
 					var dataPresent = JSON.parse(sessionStorage.getItem("allClassifieds"));
 					if(dataPresent!=null){
 						dataPresent.allClassifieds.push(classifiedData);
@@ -553,15 +576,13 @@ classified.postClassifiedView = Backbone.View.extend({
 					sessionStorage.setItem("index","1");
 					window.location = "#myclassifieds";
 				},
-				error:function(resp){
+				error:function(model,resp){
 					console.log(resp);
 				}
 			});
-		}
-		if($(".category").val()!="" && $(".heading-classified").val()!="" && $(".description").val()!=""){
-			
-		} else {
-			
+		} else{
+			utils.buildErrors(errorsList, this.$el.find(".signup-error-msg"));
+			$("html, body").animate({ scrollTop: 0 }, "slow");
 		}
 	}
 });

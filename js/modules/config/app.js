@@ -1,5 +1,4 @@
 var classifieds = classifieds || {};
-var data;
 classifieds.router = Backbone.Router.extend({
 	routes:{
 		"":"showHomePage",
@@ -9,7 +8,8 @@ classifieds.router = Backbone.Router.extend({
 		"classifieds":"showUserHomePage",
 		"myclassifieds":"showMyClassifieds",
 		"forgotpwd":"showForm",
-		"postClassified":"showClassifiedForm"
+		"postClassified":"showClassifiedForm",
+		"classified/:mailIndex":"showClassifiedDetails"
 	},
 	showHomePage:function(){
 		var homePagePresenterObj = new classifieds.homePagePresenter();
@@ -39,5 +39,9 @@ classifieds.router = Backbone.Router.extend({
 	showClassifiedForm:function(){
 		var userHomePagePresenterObj = new classifieds.userHomePagePresenter();
 		userHomePagePresenterObj.showClassifiedForm(); 
+	},
+	showClassifiedDetails:function(){
+		var classifiedDetailsObj = new classifieds.classifiedDetailsPresenter();
+		classifiedDetailsObj.showClassifiedDetails();
 	}
 });

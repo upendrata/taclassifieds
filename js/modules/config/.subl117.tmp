@@ -1,0 +1,20 @@
+var classifieds = classifieds || {};
+var data;
+classifieds.router = Backbone.Router.extend({
+	routes:{
+		"":"showHomePage",
+		"home":"showHomePage",
+		"login":"showLoginPage",
+		"signup":"showSignUpPage"
+	},
+	showHomePage:function(){
+		var homePagePresenterObj = new classifieds.homePagePresenter();
+		homePagePresenterObj.showHomePage();
+	},
+	showLoginPage:function(){
+		var loginPageObj = new classified.loginPageView({el:"#pageContainer",template:"#ta-classified-login-tpl"});
+	},
+	showSignUpPage:function(){
+		var signUpPageObj = new classified.signUpPageView({el:"#pageContainer",template:"#ta-classified-signup-tpl"});
+	}
+});

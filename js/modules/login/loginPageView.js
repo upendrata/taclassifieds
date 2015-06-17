@@ -3,10 +3,14 @@ classified.loginPageView = Backbone.View.extend({
 	initialize:function(options){
 		this.options = options  || {};
 		this.template = this.options.template;
+		this.logFormModel = this.options.logFormModel;
 		this.render();
 	},
 	render:function(){
 		this.$el.html(_.template($(this.template).html())({data:this.model}));
+		this.renderViews();
+	},
+	renderViews:function(){
 		if(sessionStorage.getItem("registrationId")!=null){
 			$(".signup-success-msg").show();
 			sessionStorage.removeItem("registrationId");
@@ -26,10 +30,24 @@ classified.loginPageView = Backbone.View.extend({
 	},
 	events:{
 		"click .login-btn":"submitForm",
-		"keyup .username":"storeData"
+		"keyup .username":"storeData",
+		"change input":"eventHandler"
 	},
 	storeData:function(){
 		sessionStorage.setItem("user",$(".username").val());
+	},
+	eventHandler:function(e){
+		var obj = $(e.currentTarget);
+		this.logFormModel.set(obj.attr('name'), $.trim(obj.val()));
+	},
+	validateFields : function(){
+		var errorMsg = [];
+		$.each(this.logFormModel.toJSON(), function(key, value){
+			if(value === "" || value === null){
+				errorMsg.push(key);
+			}
+		});
+		return errorMsg;
 	},
 	submitForm:function(){
 		var data = {
@@ -37,34 +55,29 @@ classified.loginPageView = Backbone.View.extend({
 			'username':$(".username").val(),
 			'password':$(".password").val()
 		}
-		if(data.username!="" && data.password!=""){
-			$.ajax({
+		this.logFormModel.set('queryStr','loginValidate');
+		var errorsList = this.validateFields(), self = this;
+		if(errorsList.length === 0){
+			this.logFormModel.save(null,{
 				type:"POST",
-				url:"codebase/validateUser.php",
 				dataType:"JSON",
-				data : data,
 				beforeSend:function(){
 					classifieds.Loader.show();
 				},
-				success:function(resp){
+				success:function(model,resp){
 					sessionStorage.setItem("username",data.username);
 					classified.modelRef.set('isLoggedIn', true);
 					window.location = "#myclassifieds";
 					$('.error-msg').empty();
 				},
-				error:function(e){
-					$('.error-msg').html(e.responseJSON.responseText);
+				error:function(model,resp){
+					$('.error-msg').html(resp.responseJSON.responseText);
 					classifieds.Loader.hide();
 				}
 			});
 		} else {
-			if(data.username=="" && data.password==""){
-				$('.error-msg').html("Username and password fields are empty");
-			} else if(data.username==""){
-				$('.error-msg').html("Username is empty");
-			} else {
-				$('.error-msg').html("Password is empty");
-			}
+			utils.buildErrors(errorsList, this.$el.find(".error-msg"));
+			$("html, body").animate({ scrollTop: 0 }, "slow");
 		}
 	}
 });
