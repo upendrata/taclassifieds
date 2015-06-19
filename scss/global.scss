@@ -661,6 +661,11 @@ body {
 	    	float:none;
 	    }
 	}
+	select{
+		@media screen and (min-width:768px){
+			width:327px;
+		}
+	} 
 }
 .forgot-pwd-form{
 	width: 300px;
@@ -860,6 +865,12 @@ body {
     text-align: right;
 }
 #classifieds-container {
+	.back-option {
+		cursor: pointer;
+		display:block;
+	    margin-left:0;
+	    width: 69px;
+	}
 	#categories-filter {
 		height: 30px;
 	    margin-left: 6%;
@@ -889,10 +900,11 @@ body {
 	    @media (max-width:479px){
 	    	width:291px;
 	    }
-		.back-option {
+	    .back-option {
 			cursor: pointer;
 		    margin-left:0;
 		    width: 69px;
+		    margin-bottom:10px;
 		}
 	}
 	color: #f70909;

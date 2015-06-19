@@ -173,6 +173,7 @@
 							$flag = false;
 						}
 					}
+					//echo count($files).'-'.$classifiedId;
 					if(count($files)==1){
 						$search_query = "UPDATE taclassifieds SET classifiedHeading = '$classifiedHeading', classifiedCategory = '$classifiedCategory', classifiedDesc = '$classifiedDesc', classifiedNegotiable = '$classifiedNegotiable', classifiedPrice = '$classifiedPrice', classifiedImg1 ='$files[0]', classifiedImg2 = null, classifiedImg3 = null, classifiedImg4 = null, classifiedImg5 = null WHERE classifiedId = '$classifiedId'";
 					}else if(count($files)==2){
@@ -184,7 +185,7 @@
 					}else if(count($files)==5){
 						$search_query = "UPDATE taclassifieds SET classifiedHeading = '$classifiedHeading', classifiedCategory = '$classifiedCategory', classifiedDesc = '$classifiedDesc', classifiedNegotiable = '$classifiedNegotiable', classifiedPrice = '$classifiedPrice', classifiedImg1 ='$files[0]', classifiedImg2 = '$files[1]', classifiedImg3 = '$files[2]', classifiedImg4 = '$files[3]', classifiedImg5 = '$files[4]' WHERE classifiedId = '$classifiedId'";
 					}
-					
+					//echo $search_query;
 					if(mysql_query($search_query)){
 						$flag = true;
 					}

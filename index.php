@@ -47,6 +47,16 @@
 		<script type="text/javascript" src="js/modules/signup/signUpPageModel.js"></script>
 		<script type="text/javascript" src="js/modules/signup/signUpPagePresenter.js"></script>
 		<script type="text/javascript" src="js/modules/signup/signUpPageValidation.js"></script>
+		<script type="text/javascript" src="js/modules/allClassifieds/allClassifiedsModel.js"></script>
+		<script type="text/javascript" src="js/modules/allClassifieds/allClassifiedsPresenter.js"></script>
+		<script type="text/javascript" src="js/modules/view.js"></script>
+		<script type="text/javascript" src="js/modules/allClassifieds/allClassifiedsView.js"></script>
+		<script type="text/javascript" src="js/modules/MyClassifieds/myClassifiedsModel.js"></script>
+		<script type="text/javascript" src="js/modules/MyClassifieds/myClassifiedsPresenter.js"></script>
+		<script type="text/javascript" src="js/modules/MyClassifieds/myClassifiedsView.js"></script>
+		<script type="text/javascript" src="js/modules/editClassified/editClassifiedModel.js"></script>
+		<script type="text/javascript" src="js/modules/editClassified/editClassifiedPagePresenter.js"></script>
+		<script type="text/javascript" src="js/modules/editClassified/editClassifiedPageView.js"></script>
 		<script type="text/javascript" src="js/modules/userhome/userHomePageView.js"></script>
 		<script type="text/javascript" src="js/modules/userhome/userHomePageModel.js"></script>
 		<script type="text/javascript" src="js/modules/userhome/userHomePagePresenter.js"></script>
@@ -91,7 +101,7 @@
 			<section class="home-page">
 				<div class="about-us">
 					<h2>About us</h2>
-					<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,<span class="see-more">..more</span><span class="text">when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages</span></p>
+					<p>Techaspect Classified offers free local classifieds ads where buyers meet sellers. Search and post classified ads in for Sale, Electonics, Vehicles etc.It provides simple solution to the complications invloved in buying and selling used goods. And it also provides chance to share information about company wide meetings, invitations, Activities.</p>
 				</div>
 				<div class="latest-classifieds">
 					<h3>Latest Classifieds</h3>
@@ -217,7 +227,7 @@
 				</div>
 				<div class="is-negotiable">
 					<label>Is negotiable?</label>
-					<select name="negotiable" id="negotiable" class="categories-list-item">
+					<select name="negotiable" id="negotiable" class="negotiable">
 						<option>Select</option>
 						<option value="1">Yes</option>
 						<option value="0">No</option>
@@ -234,30 +244,35 @@
 		</script>
 
 		<script type="text/template" id="ta-classified-edit-classified-tpl">
+			<div class="error-text"></div>
 			<form class="edit-a-classified">
-				<label for="category">Category</label>
-				<select id="edit-categories-list" class="edit-categories-list-item">
-					<option>Select Category</option>
-				</select>
-				<label for="heading">Heading</label>
-				<input type="text" name="heading" class="edit-heading-classified" placeholder="Heading" required>
+				<img class='back-option' src='images/back.png'/>
+				<div>
+					<label for="heading">Heading</label>
+					<input type="text" name="heading" class="edit-heading-classified" placeholder="Heading" required>
+				</div>
+				<div>
+					<label for="category">Category</label>
+					<select id="edit-categories-list" class="edit-categories-list-item">
+						<option>Select Category</option>
+					</select>
+				</div>
+				<label for="description">Specifications</label>
+				<textarea name="specification" class="edit-specification"></textarea>
 				<div>
 					<label for="price">Price</label>
 					<input type="text" name="price" class="edit-price-classified" placeholder="Price" required>
 				</div>
 				<div class="is-negotiable">
 					<label>Is negotiable?</label>
-					<select id="categories-list" class="edit-categories-list-item">
+					<select name="negotiable" id="edit-negotiable" class="edit-negotiable">
 						<option>Select</option>
-						<option value="yes">Yes</option>
-						<option value="no">No</option>
+						<option value="1">Yes</option>
+						<option value="0">No</option>
 					</select>
 				</div>
-				<label for="description">Specifications</label>
-				<textarea name="specification" class="edit-specification"></textarea>
-				<label>Upload an Image</label>	
-				<input id="image-upload" type="file" name="pic" accept="image/*">		
-				<div class="error-text"></div>
+				<span>Upload an Image <span class="upload-restrict">Images may be overridden(Max no.of images is 5 and max filesize is 2MB)</span></span>		
+				<input id="image-upload" type="file" name="pic" multiple="multiple">		
 				<button class="submit-classified" type="button">Update</button>
 			</form>
 		</script>
