@@ -9,7 +9,12 @@ classifieds.router = Backbone.Router.extend({
 		"myclassifieds":"showMyClassifieds",
 		"forgotpwd":"showForm",
 		"postClassified":"showClassifiedForm",
-		"classified/:mailIndex":"showClassifiedDetails"
+		"classified/:mailIndex":"showClassifiedDetails",
+		"editMyClssified/:Index":"showEditClassifiedForm"
+	},
+	showEditClassifiedForm:function(){
+		var editClassifiedPagePresenterObj = new classifieds.editClassifiedPagePresenter();
+		editClassifiedPagePresenterObj.updateClassified();
 	},
 	showHomePage:function(){
 		var homePagePresenterObj = new classifieds.homePagePresenter();
@@ -25,15 +30,15 @@ classifieds.router = Backbone.Router.extend({
 		signUpPagePresenterObj.showSignUpPage();
 	},
 	showUserHomePage:function(){
-		var userHomePagePresenterObj = new classifieds.userHomePagePresenter();
-		userHomePagePresenterObj.showUserHomePage(); 
+		var userHomePagePresenterObj = new classifieds.allClassifiedsPagePresenter();
+		userHomePagePresenterObj.showAllClassifieds(); 
 	},
 	showForm:function(){
 		var forgotPwdPagePresenterObj = new classifieds.forgotPasswordPagePresenter();
 		forgotPwdPagePresenterObj.showForgotPasswordPage();
 	},
 	showMyClassifieds:function(){
-		var userHomePagePresenterObj = new classifieds.userHomePagePresenter();
+		var userHomePagePresenterObj = new classifieds.myClassifiedsPagePresenter();
 		userHomePagePresenterObj.showMyClassifieds(); 
 	},
 	showClassifiedForm:function(){

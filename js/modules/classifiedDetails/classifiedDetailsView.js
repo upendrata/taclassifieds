@@ -15,6 +15,10 @@ classifieds.classifiedDetailsView = Backbone.View.extend({
   		$("#img-preview img").attr('src', $(e.currentTarget).attr('src'));
  	},
 	showClassifiedsPage:function(){
-		window.location="#classifieds";
+		if(sessionStorage.getItem("pageId")=="all"){
+			window.location="#classifieds";
+		} else {
+			window.location="#myclassifieds";
+		}
 	}
 });
