@@ -530,6 +530,7 @@ body {
 .sign-up,
 .post-a-classified,
 .edit-a-classified,
+
 .forgot-pwd-form{
 	.change-pwd {
 		width:180px;
@@ -541,6 +542,7 @@ body {
 	}
 	margin: 10px auto;
     width: 408px;
+    overflow:hidden;
     @media screen and(max-width:479px){
     	width:300px;
     }
@@ -701,7 +703,8 @@ body {
     	text-align:left;
     }
 }
-.login-page {
+.login-page,
+.change-password-form {
     margin: 10px auto 78px;
     width:270px;
     position:relative;
@@ -753,6 +756,46 @@ body {
 	    margin-bottom: 20px;
 	    margin-left: 6px;
 	    margin-top: 24px;
+	}
+}
+.change-password-form {
+	margin-top:50px;
+	width:300px;
+	.error-txt {
+		margin-bottom:15px;
+		overflow:hidden;
+	}
+	label {
+	    color: #000;
+	    display: block;
+	    font-size: 14px;
+	    font-weight: bold;
+	    margin: 7px 0;
+	}
+	input {
+		border: 1px solid #ddd;
+	    border-radius: 8px;
+	    display: inline;
+	    font-size: 15px;
+	    height: 25px;
+	    line-height: 1.6;
+	    margin: 4px 0 15px;
+	    padding: 7px 3px 7px 2px;
+	    width: 293px;
+	}
+	button {
+		background: #c1d62d none repeat scroll 0 0;
+	    border-color: -moz-use-text-color;
+	    border-image: none;
+	    border-radius: 5px;
+	    border-style: none;
+	    border-width: medium;
+	    color: #fff;
+	    font-weight:bold;
+	    float: right;
+	    font-size: 15px;
+	    padding: 6px 5px;
+	    cursor:pointer;
 	}
 }
 .password-change-text,
@@ -1013,6 +1056,29 @@ body {
     		}
     	}
 	}
+	.error-text {
+		width:100%;
+		ul {
+			width:100%;
+			list-style:inside;
+			overflow:hidden;
+			li {
+				background: none;
+			    border: none;
+			    border-radius: 3px;
+			    cursor: pointer;
+			    float: none;
+			    list-style: inside none disc;
+			    margin: 0;
+			    padding: 0;
+			    text-align: left;
+			    width: unset;
+			}
+			li:hover {
+				box-shadow:none;
+			}
+		}
+	}
 	.page-navigation-menu {
     	margin: 5px 8px;
     	text-align:right;
@@ -1105,6 +1171,13 @@ body {
 			font-size: 18px;
     		padding: 8px 25px;
 		}
+		.contact-details {
+			color: #a6a6a6;
+		    display: inline;
+		    font-size: 11px;
+		    padding-bottom: 9px;
+		    padding-left: 11px;
+		}
 		.selected-classified-description {
 	    	line-height: 1.5;
     		padding: 10px 25px;
@@ -1158,6 +1231,7 @@ body {
     		width: 279px;
 	    }
 	}
+
 }
 .my-classified-item {
 	.icons {
@@ -1212,7 +1286,7 @@ body {
 		color:#fff;
 	}
 	.footer-left {
-	    float: left;
+	    float: none;
 	    margin-left: 15px;
 	    margin-botton:0;
 	    @media screen and (max-width:479px){	
@@ -1322,6 +1396,7 @@ body {
 .post-a-classified,
 .edit-a-classified {
 	width:500px;
+	overflow:hidden;
 	@media (max-width:599px){
 		width:300px;
 	}
@@ -1363,6 +1438,42 @@ body {
     		width:279px;
     	}
     }
+    .classified-options{
+    	background-color: #fcfcfc;
+	    border: 1px solid #ccc;
+	    border-radius: 5px;
+	    display: inline-block;
+	    margin: 0 auto;
+	    width: 295px;
+		span{
+			border-right: 1px solid #ccc;
+			display: inline-block;
+			padding: 10px;
+			float:left;
+			margin-top:0;
+			font-size:13px;
+			cursor:pointer;
+		}
+		span:last-child{
+			border-right:none;
+		}
+		span.selected{
+			background-color:#C0D62D;
+			color:#fff;
+		}
+	}
+    .select-button {
+    	width:100%;
+	    .select-option {
+			width:unset;
+		}
+    }
+    .change-edit-form {
+    	width:100%;
+    }
+    .change-form {
+    	width:100%;
+    }
 	.is-negotiable{
     	
     	@media (max-width:599px){
@@ -1372,6 +1483,7 @@ body {
     span{
     	display:block;
     	font-weight:bold;
+    	margin-top:5px;
     	.upload-restrict {
     		display: inline;
     		font-weight:normal;
@@ -1455,6 +1567,7 @@ body {
     overflow: hidden;
     text-decoration: none;
     width:unset;
+    outline:0;
     border:none;
     @media (max-width:599px){
     	height:unset;
@@ -1618,6 +1731,65 @@ body {
 			}
 		}
 	}
+	ul {
+		display:none;
+	    background: #002d40 none repeat scroll 0 0;
+	    border-top: 1px solid #ddd;
+	    padding: 2px 0 14px;
+	    position: absolute;
+	    right: 5px;
+	    text-align:center;
+	    top: 85px;
+	    z-index:10;
+	    width: 150px;
+	    @media (max-width:767px){
+		    position: unset;
+		    width: 100%;
+	    }
+	    @media (max-width:1247px){
+	    	top:72px;
+	    }
+	    @media (max-width:991px){
+	    	top:76px;
+	    }
+	    @media (min-width:768px){
+	    	background:#fff;
+	    	border:1px solid grey;
+	    	color:#002d40;
+	    }
+	    li {
+		    color: #fff;
+		    cursor: pointer;
+		    display: inline-block;
+		    margin-right: 0;
+		    margin-top: 12px;
+		    @media(max-width:767px){
+			    display: block;
+			    text-align: left;
+			    margin-left:4px;
+		    }
+		    a{
+		    	color: #fff;
+			    display: unset;
+			    font-size: 13px;
+			    font-weight: bold;
+			    margin-left:0;
+			    margin-top:0;
+			    padding: 4px 6px;
+			    text-align: right;
+			    text-decoration:-moz-anchor-decoration;
+			    width: 100%;
+			    @media (min-width:768px){
+			    	color:#002d40;
+			    }
+		    }
+		    .back {
+		    	@media (min-width:768px){
+		    		display:none;
+		    	}
+		    }
+	    }
+	}
 } 
 
 .signup-error-msg ul li {
@@ -1646,6 +1818,12 @@ body {
    			@media (max-width:599px){
    				display:none;
    			}
+  		}
+  		.information{
+  			width:100%;
+  		}
+  		.imageHide{
+  			display:none;
   		}
   		#img-preview{
    			width:400px;
@@ -1732,4 +1910,7 @@ body {
 #image-upload {
 	display:block;
 	margin-bottom:0;
+}
+.success {
+	color:#000;
 }

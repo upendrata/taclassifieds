@@ -19,6 +19,14 @@ classified.headerView = Backbone.View.extend({
 		"click .home-link":"showHome",
 		"click .logout-link":"showHomePage",
 		"click #menu-icon":"showMenu",
+		"click .profile":"showChangePassword",
+		"click .back":"showMenu"
+	},
+	showChangePassword:function(){
+		this.$el.find(".change-password").slideToggle('slow');
+		if(window.innerWidth<=767){
+			$(".links").slideUp("slow");	
+		}
 	},
 	showHome:function(){
 		this.isLogged();
@@ -40,7 +48,12 @@ classified.headerView = Backbone.View.extend({
 		}
 	},
 	showMenu:function(){
-		this.$el.find(".links").slideToggle('slow');
+		if($(".change-password").is(":visible") && window.innerWidth<=767){
+			$(".change-password").slideUp("slow");
+		}
+		if(window.innerWidth<=767){
+			this.$el.find(".links").slideToggle('slow');
+		}
 	}
 });
 

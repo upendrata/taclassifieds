@@ -25,6 +25,7 @@
 						$classifiedItem['classifiedDesc'] = $search_row['classifiedDesc'];
 						$classifiedItem['classifiedNegotiable'] = $search_row['classifiedNegotiable'];
 						$classifiedItem['classifiedPrice'] = $search_row['classifiedPrice'];
+						$classifiedItem['empemail'] = $search_row['empemail'];
 
 						if($search_row['classifiedImg1'] != null){
 							array_push($classifiedImgs, $search_row['classifiedImg1']);

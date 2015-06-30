@@ -21,18 +21,21 @@
 					$empemail = mysql_real_escape_string($_POST['empemail']); $classifiedCategory = mysql_real_escape_string($_POST['classifiedCategory']);
 					$classifiedHeading = mysql_real_escape_string($_POST['classifiedHeading']); $classifiedDesc = mysql_real_escape_string($_POST['classifiedDesc']); 
 					$classifiedNegotiable = mysql_real_escape_string($_POST['classifiedNegotiable']); $classifiedPrice = mysql_real_escape_string($_POST['classifiedPrice']); 
-					
+
 					$files = array();
-					$uploaddir = './../images/classifieds/';
-					$count = 1;
-					foreach($_FILES as $file){
-						$fileData = pathinfo(basename($file["name"]));
-						$fileName = $classifiedId . '-' . $count . '.' .$fileData['extension'];
-						$count++;
-						if(move_uploaded_file($file['tmp_name'], $uploaddir.$fileName)){
-							$files[] = $fileName;
-						}else{
-							$flag = false;
+					if(!mysql_real_escape_string($_POST['info'])){
+						$uploaddir = './../images/classifieds/';
+						$count = 1;
+						foreach($_FILES as $file){
+							$fileData = pathinfo(basename($file["name"]));
+							$fileName = $classifiedId . '-' . $count . '.' .$fileData['extension'];
+							
+							$count++;
+							if(move_uploaded_file($file['tmp_name'], $uploaddir.$fileName)){
+								$files[] = $fileName;
+							}else{
+								$flag = false;
+							}
 						}
 					}
 					if(count($files)==1){
@@ -45,7 +48,10 @@
 						$postAdQuery = "INSERT INTO taclassifieds(empemail, classifiedId, classifiedCategory, classifiedHeading, classifiedDesc, classifiedDisplay, classifiedNegotiable, classifiedPrice, classifiedImg1, classifiedImg2, classifiedImg3, classifiedImg4) VALUES ('$empemail', '$classifiedId', '$classifiedCategory', '$classifiedHeading', '$classifiedDesc', 1, '$classifiedNegotiable', '$classifiedPrice', '$files[0]', '$files[1]', '$files[2]', '$files[3]')";
 					}else if(count($files)==5){
 						$postAdQuery = "INSERT INTO taclassifieds(empemail, classifiedId, classifiedCategory, classifiedHeading, classifiedDesc, classifiedDisplay, classifiedNegotiable, classifiedPrice, classifiedImg1, classifiedImg2, classifiedImg3, classifiedImg4, classifiedImg5) VALUES ('$empemail', '$classifiedId', '$classifiedCategory', '$classifiedHeading', '$classifiedDesc', 1, '$classifiedNegotiable', '$classifiedPrice', '$files[0]', '$files[1]', '$files[2]', '$files[3]', '$files[4]')";
+					}else{
+						$postAdQuery = "INSERT INTO taclassifieds(empemail, classifiedId, classifiedCategory, classifiedHeading, classifiedDesc, classifiedDisplay, classifiedNegotiable, classifiedPrice, classifiedImg1, classifiedImg2, classifiedImg3, classifiedImg4, classifiedImg5) VALUES ('$empemail', '$classifiedId', '$classifiedCategory', '$classifiedHeading', '$classifiedDesc', 1, null, null, null, null, null, null, null)";
 					}
+
 					if(mysql_query($postAdQuery)){	
 						$flag = true;
 					}

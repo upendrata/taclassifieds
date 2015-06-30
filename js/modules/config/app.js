@@ -10,7 +10,8 @@ classifieds.router = Backbone.Router.extend({
 		"forgotpwd":"showForm",
 		"postClassified":"showClassifiedForm",
 		"classified/:mailIndex":"showClassifiedDetails",
-		"editMyClssified/:Index":"showEditClassifiedForm"
+		"editMyClssified/:Index":"showEditClassifiedForm",
+		"changePassword":"showChangePasswordForm"
 	},
 	showEditClassifiedForm:function(){
 		var editClassifiedPagePresenterObj = new classifieds.editClassifiedPagePresenter();
@@ -48,5 +49,9 @@ classifieds.router = Backbone.Router.extend({
 	showClassifiedDetails:function(){
 		var classifiedDetailsObj = new classifieds.classifiedDetailsPresenter();
 		classifiedDetailsObj.showClassifiedDetails();
+	},
+	showChangePasswordForm:function(){
+		var changePasswordPageObj = new classifieds.changePasswordPagePresenter();
+		changePasswordPageObj.changePassword();
 	}
 });

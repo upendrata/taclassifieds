@@ -25,6 +25,11 @@
 	}else if($type === "updateClassified"){
 		$classifiedId= $_POST['classifiedId'];
 		return $obj->updateClassified($http_response_code, $classifiedId);
+	}else if($type === "changePassword"){
+		$uname = $_POST['empemail'];
+		$oldpass = $_POST['empoldpassword'];
+		$newpass = $_POST['empnewpassword'];
+		return $obj->changePassword($http_response_code, $uname, $newpass, $oldpass);
 	}else{
 		 // Set HTTP Response
 		$response['status'] = 405;
@@ -120,6 +125,40 @@
 				echo $res;
 			}
 		}
+		//change password
+		public function changePassword($http_response_code, $uname, $newpass, $oldpass){
+			$flag = false;
+			$dbConnect = new taClassifiedDBConnect();
+			if($dbConnect->authenticateDB()){
+				if($dbConnect->connectToDB()){
+					$search_query = "select emppassword from taclassifiedusers WHERE empemail = '$uname'";
+					$oldPassData = mysql_query($search_query);
+					$search_row = mysql_fetch_array($oldPassData);
+					if($search_row['emppassword'] === $oldpass){
+						$query = "UPDATE taclassifiedusers SET emppassword = '$newpass' WHERE empemail = '$uname'";
+						if(mysql_query($query)){
+							$flag = true;
+						}
+					}else{
+						$flag = false;
+					}
+				}
+			}
+			if($flag){
+				 // Set HTTP Response
+				$response['status'] = 200;
+				header('HTTP/1.1 '.$response['status'].' '.$http_response_code[ $response['status'] ]);
+				$res = '{"status": "Success", "responseText": "Your Password changed Successfully...."}';
+				echo $res;
+			}else{
+				 // Set HTTP Response
+				$response['status'] = 404;
+				header('HTTP/1.1 '.$response['status'].' '.$http_response_code[ $response['status'] ]);
+				
+				$res = '{"status": false, "responseText": "Old password is not correct!..."}';
+				echo $res;
+			}
+		}
 		//Delete Classified
 		public function deleteClassified($http_response_code, $classifiedId){
 			$flag = false;
@@ -161,16 +200,18 @@
 					$classifiedPrice = mysql_real_escape_string($_POST['classifiedPrice']); 
 					
 					$files = array();
-					$uploaddir = './../images/classifieds/';
-					$count = 1;
-					foreach($_FILES as $file){
-						$fileData = pathinfo(basename($file["name"]));
-						$fileName = $classifiedId . '-' . $count . '.' .$fileData['extension'];
-						$count++;
-						if(move_uploaded_file($file['tmp_name'], $uploaddir.$fileName)){
-							$files[] = $fileName;
-						}else{
-							$flag = false;
+					if(!mysql_real_escape_string($_POST['info'])){
+						$uploaddir = './../images/classifieds/';
+						$count = 1;
+						foreach($_FILES as $file){
+							$fileData = pathinfo(basename($file["name"]));
+							$fileName = $classifiedId . '-' . $count . '.' .$fileData['extension'];
+							$count++;
+							if(move_uploaded_file($file['tmp_name'], $uploaddir.$fileName)){
+								$files[] = $fileName;
+							}else{
+								$flag = false;
+							}
 						}
 					}
 					//echo count($files).'-'.$classifiedId;
@@ -184,6 +225,8 @@
 						$search_query = "UPDATE taclassifieds SET classifiedHeading = '$classifiedHeading', classifiedCategory = '$classifiedCategory', classifiedDesc = '$classifiedDesc', classifiedNegotiable = '$classifiedNegotiable', classifiedPrice = '$classifiedPrice', classifiedImg1 ='$files[0]', classifiedImg2 = '$files[1]', classifiedImg3 = '$files[2]', classifiedImg4 = '$files[3]', classifiedImg5 = null WHERE classifiedId = '$classifiedId'";
 					}else if(count($files)==5){
 						$search_query = "UPDATE taclassifieds SET classifiedHeading = '$classifiedHeading', classifiedCategory = '$classifiedCategory', classifiedDesc = '$classifiedDesc', classifiedNegotiable = '$classifiedNegotiable', classifiedPrice = '$classifiedPrice', classifiedImg1 ='$files[0]', classifiedImg2 = '$files[1]', classifiedImg3 = '$files[2]', classifiedImg4 = '$files[3]', classifiedImg5 = '$files[4]' WHERE classifiedId = '$classifiedId'";
+					} else {
+						$search_query = "UPDATE taclassifieds SET classifiedHeading = '$classifiedHeading', classifiedCategory = '$classifiedCategory', classifiedDesc = '$classifiedDesc', classifiedNegotiable = null, classifiedPrice = null, classifiedImg1 =null, classifiedImg2 = null, classifiedImg3 = null, classifiedImg4 = null, classifiedImg5 = null WHERE classifiedId = '$classifiedId'";
 					}
 					//echo $search_query;
 					if(mysql_query($search_query)){
