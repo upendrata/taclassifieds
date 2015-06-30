@@ -52,15 +52,15 @@ var data={
     "categories":{
         "c1": {
             "value": "1",
-            "option": "Electronics"
+            "option": "Computers"
         },
         "c2": {
             "value": "2",
-            "option": "Clothing"
+            "option":"Vehicles"
         },
         "c3": {
             "value": "3",
-            "option": "Footwear"
+            "option":"Mobiles"
         },
         "c4": {
             "value": "4",

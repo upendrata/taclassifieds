@@ -23,6 +23,7 @@ classifieds.editClassifiedPagePresenter = function(){
 					classifiedId : sessionStorage.getItem("edit-classified-id")
 				},
 				success:function(resp){
+					console.log(resp);
 					classified.classifiedDetails = new classifieds.editClassifiedModel(resp);
 					sessionStorage.setItem("editClassifiedDetails",JSON.stringify(classified.classifiedDetails));
 					renderEditClassifiedForm();

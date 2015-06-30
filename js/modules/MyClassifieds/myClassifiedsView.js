@@ -130,7 +130,7 @@ classified.myClassifiedsView = Backbone.View.extend({
 			sessionStorage.setItem("pageId","my");
 			sessionStorage.setItem("id",id);
 			window.location="#classified/:"+id;
-		} else if(source.is(".icons>span")){
+		} else if(source.is(".icons>.edit")){
 			var source=$(e.target);
 				var index = (source.parents('.my-classified-item').index());
 				var indexValue = (index+this.startValue);
@@ -171,8 +171,8 @@ classified.myClassifiedsView = Backbone.View.extend({
 			success:function(resp){
 				sessionStorage.removeItem("allMyClassifieds");
 				sessionStorage.removeItem("allClassifieds");
-				var userHomePagePresenterObj = new classifieds.myClassifiedsPagePresenter();
-				userHomePagePresenterObj.showMyClassifieds();
+				window.location="#myclassifieds";
+
 			},
 			error:function(resp){
 				/*$("#classifieds-container").prepend(resp.responseJSON.responseText);*/

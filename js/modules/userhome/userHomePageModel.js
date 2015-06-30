@@ -33,3 +33,26 @@ classifieds.postClassifiedFormModel = Backbone.Model.extend({
 	},
 	url:"codebase/postAClassified.php"
 });
+
+
+classifieds.postInformationModel = Backbone.Model.extend({
+	defaults:{
+		'heading':null,
+		'specification':null
+	},
+	initialize:function(){
+
+	},
+	url:"codebase/postAClassified.php"
+});
+
+classifieds.postInformationImageModel = Backbone.Model.extend({
+	defaults:{
+		'heading':null,
+		'specification':null
+	},
+	initialize:function(){
+
+	},
+	url:"codebase/postAClassified.php"
+});

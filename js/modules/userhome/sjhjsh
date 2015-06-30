@@ -1,0 +1,149 @@
+if(!$(".info").is(":checked")){
+			var data = new FormData();
+			if(this.files==null){
+				$(".error-text").html("no files uploaded");
+			} else {
+				$.each(this.files, function(key, value){
+					data.append(key, value);
+				});
+			}
+			data.append('empemail', sessionStorage.getItem("username"));
+			data.append('classifiedCategory', category);
+			data.append('classifiedHeading', heading);
+			data.append('classifiedNegotiable', parseInt($("#negotiable option:selected").val()));
+			data.append('classifiedPrice', parseFloat($(".price-classified").val()));
+			data.append('classifiedDesc', $(".specification").val());	
+			data.append('info',false);
+		}
+		if($(".info").is(":checked")){
+			var classifiedData = {
+				empemail : sessionStorage.getItem("username"),
+				classifiedCategory : null,
+				classifiedHeading : heading,
+				classifiedNegotiable:null,
+				classifiedPrice:null,
+				classifiedDesc : $(".specification").val(),
+				info:true
+			};
+		} else if($(".info-image").is(":checked")){
+			var classifiedData = {
+				empemail : sessionStorage.getItem("username"),
+				classifiedCategory : null,
+				classifiedHeading : heading,
+				classifiedNegotiable:null,
+				classifiedPrice:null,
+				classifiedDesc : $(".specification").val(),
+				info:false
+			};
+		} else {
+			var classifiedData = {
+				empemail : sessionStorage.getItem("username"),
+				classifiedCategory : category,
+				classifiedHeading : heading,
+				classifiedNegotiable:$("#negotiable option:selected").val(),
+				classifiedPrice:$(".price-classified").val(),
+				classifiedDesc : $(".specification").val(),
+				info:false
+			};
+		}
+
+		var errorsList = this.validateFields(), self = this;
+		/*if(errorsList.length === 0){*/
+		if($(".info").is(":checked")){
+			$.ajax({
+				type:"POST",
+				url:"codebase/postAClassified.php",
+				dataType:"JSON",
+				processData: false,
+      			contentType: false,
+				data:classifiedData,
+				success:function(resp){
+					classifiedData.classifiedId = resp.id;
+					var dataPresent = JSON.parse(sessionStorage.getItem("allClassifieds"));
+					if(dataPresent!=null){
+						dataPresent.allClassifieds.push(classifiedData);
+						sessionStorage.setItem("allClassifieds",JSON.stringify(dataPresent));
+					}
+					var myClassifieds = JSON.parse(sessionStorage.getItem("allMyClassifieds"));
+					if(myClassifieds!=null){
+						myClassifieds.allMyClassifieds.push(classifiedData);
+						sessionStorage.setItem("allMyClassifieds",JSON.stringify(myClassifieds));
+					}
+					sessionStorage.setItem("index","1");
+					window.location = "#myclassifieds";
+				},
+				error:function(resp){
+					$(".error-text").html(resp.responseJSON.responseText);
+				}
+			});
+		} else {
+			$.ajax({
+				type:"POST",
+				url:"codebase/postAClassified.php",
+				dataType:"JSON",
+				processData: false,
+      			contentType: false,
+				data:data,
+				success:function(resp){
+					classifiedData.classifiedId = resp.id;
+					var dataPresent = JSON.parse(sessionStorage.getItem("allClassifieds"));
+					if(dataPresent!=null){
+						dataPresent.allClassifieds.push(classifiedData);
+						sessionStorage.setItem("allClassifieds",JSON.stringify(dataPresent));
+					}
+					var myClassifieds = JSON.parse(sessionStorage.getItem("allMyClassifieds"));
+					if(myClassifieds!=null){
+						myClassifieds.allMyClassifieds.push(classifiedData);
+						sessionStorage.setItem("allMyClassifieds",JSON.stringify(myClassifieds));
+					}
+					sessionStorage.setItem("index","1");
+					window.location = "#myclassifieds";
+				},
+				error:function(resp){
+					$(".error-text").html(resp.responseJSON.responseText);
+				}
+			});
+		}
+
+
+
+
+
+
+
+
+/*if($(".info-image").is(":checked")){
+			var data = new FormData();
+			if(this.files==null){
+				$(".error-text").html("no files uploaded");
+			} else {
+				$.each(this.files, function(key, value){
+					data.append(key, value);
+				});
+			}
+			data.append('empemail', sessionStorage.getItem("username"));
+			data.append('classifiedCategory', null);
+			data.append('classifiedHeading', heading);
+			data.append('classifiedNegotiable', -1);
+			data.append('classifiedPrice', -1);
+			data.append('classifiedDesc', $(".specification").val());	
+			data.append('info',0);
+
+		} else if($(".classified").is(":checked")){
+			var data = new FormData();
+			if(this.files==null){
+				$(".error-text").html("no files uploaded");
+			} else {
+				$.each(this.files, function(key, value){
+					data.append(key, value);
+				});
+			}
+			data.append('empemail', sessionStorage.getItem("username"));
+			data.append('classifiedCategory', category);
+			data.append('classifiedHeading', heading);
+			data.append('classifiedNegotiable', parseInt($("#negotiable option:selected").val()));
+			data.append('classifiedPrice', parseFloat($(".price-classified").val()));
+			data.append('classifiedDesc', $(".specification").val());	
+			data.append('info',0);
+		} */
+		

@@ -9,7 +9,14 @@ var utils = (function(){
 		"empqans" : "Please Enter Answer for Security Question",
 		"passwordsnotmatch" : "Password and Confirmation password are not same",
 		"username":"Please Enter Username",
-		"password":"Please Enter Password"
+		"password":"Please Enter Password",
+		"heading":"Please Enter Heading",
+		"category":"Please Select category",
+		"specification":"Please enter the specifications",
+		"price":"Please enter the price",
+		"negotiable":"Please Select negotiable",
+		"imageslimit":"Can't upload more than five images",
+		"imagesize":"Maximum size of image is 2MB"
 	}
 	return {
 		buildErrors : function(errorsList, target){

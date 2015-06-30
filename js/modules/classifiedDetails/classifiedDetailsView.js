@@ -6,6 +6,21 @@ classifieds.classifiedDetailsView = Backbone.View.extend({
 	},
 	render:function(){
 		this.$el.html(_.template($(this.template).html())({data:this.model.attributes[0]}));
+		this.renderDetails();
+	},
+	renderDetails:function(){
+		var images = this.model.attributes[0].classifiedImgs;
+		if(images.length==0){
+			$(".classified-data").addClass("information");
+			$(".image-section").remove();
+		} else {
+			$(".classified-data").removeClass("information");
+		}
+		var price = this.model.attributes[0].classifiedPrice;
+		if(price==null || price<0) {
+			$(".selected-classified-price").remove();
+			$(".is-negotiable").remove();
+		}
 	},
 	events :{
 		"click .back-option":"showClassifiedsPage",

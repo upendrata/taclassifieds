@@ -47,6 +47,8 @@
 		<script type="text/javascript" src="js/modules/signup/signUpPageModel.js"></script>
 		<script type="text/javascript" src="js/modules/signup/signUpPagePresenter.js"></script>
 		<script type="text/javascript" src="js/modules/signup/signUpPageValidation.js"></script>
+		<script type="text/javascript" src="js/modules/ChangePassword/changePasswordPresenter.js"></script>
+		<script type="text/javascript" src="js/modules/ChangePassword/changePasswordView.js"></script>
 		<script type="text/javascript" src="js/modules/allClassifieds/allClassifiedsModel.js"></script>
 		<script type="text/javascript" src="js/modules/allClassifieds/allClassifiedsPresenter.js"></script>
 		<script type="text/javascript" src="js/modules/view.js"></script>
@@ -88,12 +90,15 @@
 				<% if(!isLoggedIn){%>
 					<a href="#login">Login <i class="fa fa-angle-right fa-lg"></i></a>
 					<a href="#signup">SignUp <i class="fa fa-angle-right fa-lg"></i></a>
-					
 				<%}else{%>
-					<a href="#profile">My Profile <i class="fa fa-angle-right fa-lg"></i></a>
+					<a class="profile" href="javascript:void(0)">My Profile <i class="fa fa-angle-right fa-lg"></i></a>
 					<a class="logout-link" href="#home">LogOut <i class="fa fa-angle-right fa-lg"></i></a>
 				<%}%>
 			</div>
+			<ul class="change-password">
+				<li><a class="back" href="javascript:void(0)">Back</a></li>
+				<li><a href="#changePassword">Change Password</a></li>
+			</ul>
 		</script>
 
 		<script type="text/template" id="ta-classified-homepage-tpl">
@@ -129,7 +134,21 @@
 			</div>
 		</script>
 
+		<script type="text/template" id="ta-classified-change-password-tpl">
+			<div class="change-password-form">
+				<div class="error-txt"></div>
+				<label>Current Password</label>
+				<input type="password" class="current-password" placeholder="Current Password">
+				<label>New Password</label>
+				<input type="password" class="new-password" placeholder="New Password">
+				<label>Confirm Password</label>
+				<input type="password" class="confirm-pwd" placeholder="Confirm Password">
+				<button type="submit" class="change-pwd-btn">Change Password</button>
+			</div>
+		</script>
+
 		<script type="text/template" id="ta-classified-forgot-password-tpl">
+			<div class="forgot-pwd-error-msg"></div>
 			<div class="forgot-pwd-form">
 				<label>Select your question</label>
 				<select id="selected-question" class="security-ques"></select>
@@ -180,7 +199,7 @@
 			</div>
 			<div class="classified-details">
 				<div class="classified-data">
-					<div class="selected-classified-category"><%=data.classifiedCategory%></div>
+					<div class="selected-classified-category"><%=data.classifiedCategory%><span class="contact-details">by <%=data.empemail%></span></div>
 					<div class="selected-classified-heading"><%=data.classifiedHeading%></div>
 					<div class="selected-classified-price">Price - <span>Rs.<%=data.classifiedPrice%></span></div>
 					<div class="is-negotiable">Is Negotiable - 
@@ -191,12 +210,13 @@
 						<%}%>
 					</div>
 					<div class="selected-classified-description"><%=data.classifiedDesc%></div>
+
 				</div>
 				<div class="image-section">
 			    	<div id="img-preview"><img src="images/classifieds/<%=data.classifiedFirstImg%>"/></div>
 			    		<div class="thumg-images clearfix">
 			    			<%_.each(data.classifiedImgs, function(item){
-			    				if(item != null){%>
+			    				if(item!= null){%>
 			        				<img class='thumb-img' src='images/classifieds/<%=item%>' alt="classified image" />
 			       				<%}
 			      			});%>
@@ -207,13 +227,22 @@
 		</script>
 
 		<script type="text/template" id="ta-classified-post-classified-tpl">
-			<div class="error-text"></div>
+			
 			<form class="post-a-classified" enctype="multipart/form-data" method="POST">
+				<div class="error-text"></div>
+				<div class="select-button">
+					<label>Select the Classified Type</label>
+				</div>
+				<div class="classified-options">
+					<span class="select-option info selected" data-val="1">Information</span>
+					<span class="select-option info-image" data-val="2">Info with Image</span>
+					<span class="select-option classified" data-val="3">Classified</span>
+				</div>
 				<div>
 					<label for="heading">Heading</label>
 					<input type="text" name="heading" class="heading-classified" placeholder="Heading" required>
 				</div>
-				<div>
+				<div class="category-label">
 					<label for="category">Category</label>
 					<select name="category" id="categories-list" class="categories-list-item">
 						<option>Select Category</option>
@@ -221,22 +250,38 @@
 				</div>
 				<label for="specifications">Specifications/Description</label>
 				<textarea name="specification" class="specification"></textarea>
+				<div class="change-form">
+					<button class="submit-classified" type="button">Post</button>
 				<div>
-					<label for="price">Price</label>
-					<input type="text" name="price" class="price-classified" placeholder="Price" required>
-				</div>
-				<div class="is-negotiable">
-					<label>Is negotiable?</label>
-					<select name="negotiable" id="negotiable" class="negotiable">
-						<option>Select</option>
-						<option value="1">Yes</option>
-						<option value="0">No</option>
-					</select>
-				</div>
-				<span>Upload an Image <span class="upload-restrict"> (Max no. of images is 5 and max filesize is 2MB)</span></span>	
-				<input id="image-upload" type="file" name="pic" multiple="multiple">	
-				<button class="submit-classified" type="button">Post</button>
 			</form>
+		</script>
+
+		<script type="text/template" id="ta-classified-button-tpl">	
+			<button class="submit-classified" type="button">Post</button>
+		</script>
+
+		<script type="text/template" id="ta-classified-info-tpl">
+			<span class="image-upload">Upload an Image <span class="upload-restrict"> (Max no. of images is 5 and max filesize is 2MB)</span></span>	
+			<input id="image-upload" type="file" name="pic" multiple="multiple">	
+			<button class="submit-classified" type="button">Post</button>
+		</script>
+
+		<script type="text/template" id="ta-classified-add-price-tpl">
+			<div>
+				<label for="price">Price</label>
+				<input type="text" name="price" class="price-classified" placeholder="Price" required>
+			</div>
+			<div class="is-negotiable">
+				<label>Is negotiable?</label>
+				<select name="negotiable" id="negotiable" class="negotiable">
+					<option>Select</option>
+					<option value="1">Yes</option>
+					<option value="0">No</option>
+				</select>
+			</div>
+			<span class="image-upload">Upload an Image <span class="upload-restrict"> (Max no. of images is 5 and max filesize is 2MB)</span></span>	
+			<input id="image-upload" type="file" name="pic" multiple="multiple">	
+			<button class="submit-classified" type="button">Post</button>
 		</script>
 
 		<script type="text/template" id="ta-classified-categories-list-tpl">
@@ -244,14 +289,15 @@
 		</script>
 
 		<script type="text/template" id="ta-classified-edit-classified-tpl">
-			<div class="error-text"></div>
+			
 			<form class="edit-a-classified">
+				<div class="error-text"></div>
 				<img class='back-option' src='images/back.png'/>
 				<div>
 					<label for="heading">Heading</label>
 					<input type="text" name="heading" class="edit-heading-classified" placeholder="Heading" required>
 				</div>
-				<div>
+				<div class="edit-category">
 					<label for="category">Category</label>
 					<select id="edit-categories-list" class="edit-categories-list-item">
 						<option>Select Category</option>
@@ -259,24 +305,36 @@
 				</div>
 				<label for="description">Specifications</label>
 				<textarea name="specification" class="edit-specification"></textarea>
-				<div>
-					<label for="price">Price</label>
-					<input type="text" name="price" class="edit-price-classified" placeholder="Price" required>
+				<div class="change-edit-form">
+					<button class="submit-classified" type="button">Update</button>
 				</div>
-				<div class="is-negotiable">
-					<label>Is negotiable?</label>
-					<select name="negotiable" id="edit-negotiable" class="edit-negotiable">
-						<option>Select</option>
-						<option value="1">Yes</option>
-						<option value="0">No</option>
-					</select>
-				</div>
-				<span>Upload an Image <span class="upload-restrict">Images may be overridden(Max no.of images is 5 and max filesize is 2MB)</span></span>		
-				<input id="image-upload" type="file" name="pic" multiple="multiple">		
-				<button class="submit-classified" type="button">Update</button>
 			</form>
 		</script>
 
+		<script type="text/template" id="ta-classified-edit-price-tpl">
+			<div>
+				<label for="price">Price</label>
+				<input type="text" name="price" class="edit-price-classified" placeholder="Price" required>
+			</div>
+			<div class="is-negotiable">
+				<label>Is negotiable?</label>
+				<select name="negotiable" id="edit-negotiable" class="edit-negotiable">
+					<option>Select</option>
+					<option value="1">Yes</option>
+					<option value="0">No</option>
+				</select>
+			</div>
+			<span>Upload an Image <span class="upload-restrict">Images may be overridden(Max no.of images is 5 and max filesize is 2MB)</span></span>		
+			<input id="image-upload" type="file" name="pic" multiple="multiple">		
+			<button class="submit-classified" type="button">Update</button>
+		</script>
+
+		<script type="text/template" id="ta-classified-image-upload-tpl">
+			<span>Upload an Image <span class="upload-restrict">Images may be overridden(Max no.of images is 5 and max filesize is 2MB)</span></span>		
+			<input id="image-upload" type="file" name="pic" multiple="multiple">		
+			<button class="submit-classified" type="button">Update</button>
+		</script>
+			
 		<script type="text/template" id="ta-classified-signup-tpl">
 			<div class="sign-up" name="signup-form">
 				<span class="signup-error-msg"></span>
@@ -335,7 +393,6 @@
 
 		<script type="text/template" id="ta-classified-footer-tpl">
 			<span class="footer-left">&#169; 2015 TechAspect Solutions Inc.</span>
-			<span class="footer-right"><a href="javascript:void(0)">Privacy Statement</a>&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)">Terms of Use</a></span>
 		</script>
 	</body>
 </html>
